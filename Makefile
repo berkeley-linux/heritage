@@ -1,6 +1,6 @@
 # $Id$
 
-.PHONY: all build clean makefiles
+.PHONY: all build clean makefiles distclean
 
 all: build
 
@@ -24,3 +24,6 @@ clean: makefiles
 			$(MAKE) -C $$i clean ; \
 		fi \
 	done
+
+distclean: makefiles clean
+	rm -f */Makefile
