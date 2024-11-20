@@ -111,6 +111,8 @@ static char sccsid[] = "@(#)inetd.c	8.4 (Berkeley) 4/13/94";
 #include <string.h>
 #include <syslog.h>
 #include <unistd.h>
+#include <time.h>
+#include <grp.h>
 
 #include "pathnames.h"
 
@@ -292,10 +294,12 @@ main(argc, argv, envp)
 	    fd_set readable;
 
 	    if (nsock == 0) {
+#ifndef __linux__
 		(void) sigblock(SIGBLOCK);
 		while (nsock == 0)
 		    sigpause(0L);
 		(void) sigsetmask(0L);
+#endif
 	    }
 	    readable = allsock;
 	    if ((n = select(maxsock + 1, &readable, (fd_set *)0,
@@ -336,7 +340,9 @@ main(argc, argv, envp)
 			    }
 		    } else
 			    ctrl = sep->se_fd;
+#ifndef __linux__
 		    (void) sigblock(SIGBLOCK);
+#endif
 		    pid = 0;
 		    dofork = (sep->se_bi == 0 || sep->se_bi->bi_fork);
 		    if (dofork) {
@@ -356,7 +362,9 @@ main(argc, argv, envp)
 			"%s/%s server failing (looping), service terminated",
 					    sep->se_service, sep->se_proto);
 					close_sep(sep);
+#ifndef __linux__
 					sigsetmask(0L);
+#endif
 					if (!timingout) {
 						timingout = 1;
 						alarm(RETRYTIME);
@@ -371,7 +379,9 @@ main(argc, argv, envp)
 			    if (!sep->se_wait &&
 				sep->se_socktype == SOCK_STREAM)
 				    close(ctrl);
+#ifndef __linux__
 			    sigsetmask(0L);
+#endif
 			    sleep(1);
 			    continue;
 		    }
@@ -382,7 +392,9 @@ main(argc, argv, envp)
 			        nsock--;
 			    }
 		    }
+#ifndef __linux__
 		    sigsetmask(0L);
+#endif
 		    if (pid == 0) {
 			    if (debug && dofork)
 				setsid();
@@ -502,7 +514,9 @@ config(signo)
 		if (sep != 0) {
 			int i;
 
+#ifndef __linux__
 			omask = sigblock(SIGBLOCK);
+#endif
 			/*
 			 * sep->se_wait may be holding the pid of a daemon
 			 * that we're waiting for.  If so, don't overwrite
@@ -519,7 +533,9 @@ config(signo)
 				SWAP(sep->se_server, cp->se_server);
 			for (i = 0; i < MAXARGV; i++)
 				SWAP(sep->se_argv[i], cp->se_argv[i]);
+#ifndef __linux__
 			sigsetmask(omask);
+#endif
 			freeconfig(cp);
 			if (debug)
 				print_service("REDO", sep);
@@ -553,7 +569,9 @@ config(signo)
 	/*
 	 * Purge anything not looked at above.
 	 */
+#ifndef __linux__
 	omask = sigblock(SIGBLOCK);
+#endif
 	sepp = &servtab;
 	while (sep = *sepp) {
 		if (sep->se_checked) {
@@ -568,7 +586,9 @@ config(signo)
 		freeconfig(sep);
 		free((char *)sep);
 	}
+#ifndef __linux__
 	(void) sigsetmask(omask);
+#endif
 }
 
 void
@@ -670,10 +690,14 @@ enter(cp)
 	}
 	*sep = *cp;
 	sep->se_fd = -1;
+#ifndef __linux__
 	omask = sigblock(SIGBLOCK);
+#endif
 	sep->se_next = servtab;
 	servtab = sep;
+#ifndef __linux__
 	sigsetmask(omask);
+#endif
 	return (sep);
 }
 
@@ -892,6 +916,30 @@ newstr(cp)
 	syslog(LOG_ERR, "strdup: %m");
 	exit(-1);
 }
+
+#ifdef __linux__
+void
+setproctitle(a, s)
+        char *a;
+        int s;
+{
+        int size;
+        char *cp;
+        struct sockaddr_in sin;
+        char buf[80];
+
+        cp = Argv[0];
+        size = sizeof(sin);
+        if (getpeername(s, (struct sockaddr *)&sin, &size) == 0)
+                (void) sprintf(buf, "-%s [%s]", a, inet_ntoa(sin.sin_addr)); 
+        else
+                (void) sprintf(buf, "-%s", a); 
+        strncpy(cp, buf, LastArg - cp);
+        cp += strlen(cp);
+        while (cp < LastArg)
+                *cp++ = ' ';
+}
+#endif
 
 /*
  * Internet services provided internally by inetd:
