@@ -662,7 +662,7 @@ pprint(pp, flag)
     register struct process *pp;
     bool    flag;
 {
-    register status, reason;
+    register int status, reason;
     struct process *tp;
     int     jobflags, pstatus;
     bool hadnl = 1;	/* did we just have a newline */

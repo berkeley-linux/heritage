@@ -40,6 +40,7 @@ extern Char STRequal[];
 extern Char STRfakecom1[];
 extern Char STRfakecom[];
 extern Char STRfignore[];
+extern Char STRfilec[];
 extern Char STRhistchars[];
 extern Char STRhistfile[];
 extern Char STRhistory[];

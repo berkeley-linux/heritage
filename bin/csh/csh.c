@@ -97,7 +97,7 @@ bool    tellwhat = 0;
 extern char **environ;
 
 static int	readf __P((void *, char *, int));
-static fpos_t	seekf __P((void *, fpos_t, int));
+static off_t	seekf __P((void *, off_t, int));
 static int	writef __P((void *, const char *, int));
 static int	closef __P((void *));
 static int	srccat __P((Char *, Char *));
@@ -1253,10 +1253,10 @@ writef(oreo, buf, siz)
     return write(DESC(oreo), buf, siz);
 }
 
-static fpos_t
+static off_t
 seekf(oreo, off, whence)
     void *oreo;
-    fpos_t off;
+    off_t off;
     int whence;
 {
     return lseek(DESC(oreo), off, whence);

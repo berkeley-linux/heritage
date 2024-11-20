@@ -1,15 +1,12 @@
 # $Id$
 
-CC = cc
-CFLAGS = -g -DEXTENDED -D_DEFAULT_SOURCE -Dunix -fcommon -I. -Werror
-LDFLAGS =
-LIBS =
+include $(TOPDIR)/Config.mk
 
 .PHONY: all clean
 .SUFFIXES: .c .o
 
 @output@: @objects@
-	$(CC) $(LDFLAGS) -o $@ @objects@ $(LIBS)
+	$(CC) $(LDFLAGS) -o $@ @objects@ $(LIBS) @ifreq@
 
 .c.o:
 	$(CC) $(CFLAGS) -c -o $@ $<

@@ -441,8 +441,8 @@ tsearch(word, command, max_word_length)
 {
     static Char **items = NULL;
     register DIR *dir_fd;
-    register numitems = 0, ignoring = TRUE, nignored = 0;
-    register name_length, looking_for_lognames;
+    register int numitems = 0, ignoring = TRUE, nignored = 0;
+    register int name_length, looking_for_lognames;
     Char    tilded_dir[MAXPATHLEN + 1], dir[MAXPATHLEN + 1];
     Char    name[MAXNAMLEN + 1], extended_name[MAXNAMLEN + 1];
     Char   *entry;

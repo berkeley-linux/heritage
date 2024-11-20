@@ -48,6 +48,7 @@ static char sccsid[] = "@(#)set.c	8.2 (Berkeley) 3/22/95";
 
 #include "csh.h"
 #include "extern.h"
+#include "const.h"
 
 static Char	*getinx __P((Char *, int *));
 static void	 asx __P((Char *, int, Char *));
@@ -451,7 +452,7 @@ adrof1(name, v)
     register Char *name;
     register struct varent *v;
 {
-    register cmp;
+    register int cmp;
 
     v = v->v_left;
     while (v && ((cmp = *name - *v->v_name) ||
@@ -506,7 +507,7 @@ setq(name, vec, p)
     register struct varent *p;
 {
     register struct varent *c;
-    register f;
+    register int f;
 
     f = 0;			/* tree hangs off the header's left link */
     while ((c = p->v_link[f]) != NULL) {
@@ -580,7 +581,7 @@ unsetv1(p)
     register struct varent *p;
 {
     register struct varent *c, *pp;
-    register f;
+    register int f;
 
     /*
      * Free associated memory first to avoid complications.
@@ -723,7 +724,7 @@ balance(p, f, d)
     register struct varent *t;	/* used by the rotate macros */
 
 #endif
-    register ff;
+    register int ff;
 
     /*
      * Ok, from here on, p is the node we're operating on; pp is it's parent; f
@@ -812,7 +813,7 @@ plist(p)
     register struct varent *p;
 {
     register struct varent *c;
-    register len;
+    register int len;
     sigset_t sigset;
 
     if (setintr) {

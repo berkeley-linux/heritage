@@ -94,7 +94,7 @@ isbfunc(t)
      * one past the end.
      */
     for (bp1 = bfunc, bp2 = bfunc + nbfunc; bp1 < bp2;) {
-	register i;
+	register int i;
 
 	bp = bp1 + ((bp2 - bp1) >> 1);
 	if ((i = *cp - *bp->bname) == 0 &&
@@ -605,7 +605,7 @@ srchx(cp)
     register Char *cp;
 {
     register struct srch *sp, *sp1, *sp2;
-    register i;
+    register int i;
 
     /*
      * Binary search Sp1 is the beginning of the current search range. Sp2 is

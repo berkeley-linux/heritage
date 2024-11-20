@@ -68,19 +68,19 @@ static char sccsid[] = "@(#)exp.c	8.1 (Berkeley) 5/31/93";
 #define EQMATCH 7
 #define NOTEQMATCH 8
 
-static int	exp1	__P((Char ***, bool));
-static int	exp2	__P((Char ***, bool));
-static int	exp2a	__P((Char ***, bool));
-static int	exp2b	__P((Char ***, bool));
-static int	exp2c	__P((Char ***, bool));
-static Char *	exp3	__P((Char ***, bool));
-static Char *	exp3a	__P((Char ***, bool));
-static Char *	exp4	__P((Char ***, bool));
-static Char *	exp5	__P((Char ***, bool));
-static Char *	exp6	__P((Char ***, bool));
-static void	evalav	__P((Char **));
-static int	isa	__P((Char *, int));
-static int	egetn	__P((Char *));
+static int	exp1		__P((Char ***, bool));
+static int	csh_exp2	__P((Char ***, bool));
+static int	exp2a		__P((Char ***, bool));
+static int	exp2b		__P((Char ***, bool));
+static int	exp2c		__P((Char ***, bool));
+static Char *	exp3		__P((Char ***, bool));
+static Char *	exp3a		__P((Char ***, bool));
+static Char *	exp4		__P((Char ***, bool));
+static Char *	exp5		__P((Char ***, bool));
+static Char *	exp6		__P((Char ***, bool));
+static void	evalav		__P((Char **));
+static int	isa		__P((Char *, int));
+static int	egetn		__P((Char *));
 
 #ifdef EDEBUG
 static void	etracc	__P((char *, Char *, Char ***));
@@ -122,7 +122,7 @@ exp1(vp, ignore)
     register Char ***vp;
     bool    ignore;
 {
-    register int p1 = exp2(vp, ignore);
+    register int p1 = csh_exp2(vp, ignore);
 
 #ifdef EDEBUG
     etraci("exp1 p1", p1, vp);
@@ -141,7 +141,7 @@ exp1(vp, ignore)
 }
 
 static int
-exp2(vp, ignore)
+csh_exp2(vp, ignore)
     register Char ***vp;
     bool    ignore;
 {
@@ -154,7 +154,7 @@ exp2(vp, ignore)
 	register int p2;
 
 	(*vp)++;
-	p2 = exp2(vp, ignore);
+	p2 = csh_exp2(vp, ignore);
 #ifdef EDEBUG
 	etraci("exp3 p2", p2, vp);
 #endif
