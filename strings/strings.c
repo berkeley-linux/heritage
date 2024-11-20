@@ -64,7 +64,9 @@ static int	hcnt,			/* head count */
 static u_char	hbfr[sizeof(EXEC)];	/* buffer for struct exec */
 
 static void usage();
+int getch();
 
+int
 main(argc, argv)
 	int argc;
 	char **argv;
@@ -194,6 +196,7 @@ nextfile: ;
  * getch --
  *	get next character from wherever
  */
+int
 getch()
 {
 	++foff;

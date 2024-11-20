@@ -46,9 +46,14 @@ static char sccsid[] = "@(#)fold.c	8.1 (Berkeley) 6/6/93";
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 #define	DEFLINEWIDTH	80
 
+void fold();
+
+int
 main(argc, argv)
 	int argc;
 	char **argv;
@@ -101,6 +106,7 @@ main(argc, argv)
 	exit(0);
 }
 
+void
 fold(width)
 	register int width;
 {

@@ -60,6 +60,7 @@ void err __P((const char *, ...));
 void run __P((char **));
 void usage __P((void));
 
+int
 main(argc, argv)
 	int argc;
 	char **argv;

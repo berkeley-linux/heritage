@@ -107,7 +107,7 @@ static int eqrel __P((void));
 static int shift __P((void));
 static int primary __P((void));
 static int term __P((void));
-static int exp __P((void));
+static int bsd_exp __P((void));
 static int unary __P((void));
 static int factor __P((void));
 static int constant __P((void));
@@ -322,9 +322,9 @@ term()
 {
 	register int c, vl, vr;
 
-	vl = exp();
+	vl = bsd_exp();
 	while ((c = skipws()) == '*' || c == '/' || c == '%') {
-		vr = exp();
+		vr = bsd_exp();
 
 		switch (c) {
 		case '*':
@@ -346,9 +346,9 @@ term()
  * <term> := <unary> { <expop> <unary> }
  */
 static int
-exp()
+bsd_exp()
 {
-	register c, vl, vr, n;
+	register int c, vl, vr, n;
 
 	vl = unary();
 	switch (c = skipws()) {
@@ -360,7 +360,7 @@ exp()
 		}
 
 	case '^':
-		vr = exp();
+		vr = bsd_exp();
 		n = 1;
 		while (vr-- > 0)
 			n *= vl;

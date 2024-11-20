@@ -47,6 +47,7 @@ static char sccsid[] = "@(#)printf.c	8.2 (Berkeley) 3/22/95";
 
 #include <err.h>
 #include <errno.h>
+#include <unistd.h>
 #include <limits.h>
 #ifdef SHELL
 #define	EOF	-1
