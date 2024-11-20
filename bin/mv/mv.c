@@ -56,6 +56,8 @@ static char sccsid[] = "@(#)mv.c	8.2 (Berkeley) 4/2/94";
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <pwd.h>
+#include <grp.h>
 
 #include "pathnames.h"
 

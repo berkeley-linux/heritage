@@ -56,6 +56,8 @@ static char sccsid[] = "@(#)ls.c	8.7 (Berkeley) 8/5/94";
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <pwd.h>
+#include <grp.h>
 
 #include "ls.h"
 #include "extern.h"
@@ -414,10 +416,10 @@ display(p, list)
 
 			btotal += sp->st_blocks;
 			if (f_longform) {
-				user = user_from_uid(sp->st_uid, 0);
+				user = (char*)user_from_uid(sp->st_uid, 0);
 				if ((ulen = strlen(user)) > maxuser)
 					maxuser = ulen;
-				group = group_from_gid(sp->st_gid, 0);
+				group = (char*)group_from_gid(sp->st_gid, 0);
 				if ((glen = strlen(group)) > maxgroup)
 					maxgroup = glen;
 				if (f_flags) {
