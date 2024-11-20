@@ -1,12 +1,12 @@
 # $Id$
 
-.PHONY: all clean
-.SUFFIXES: .c .o
-
 CC = cc
 CFLAGS = -g -DEXTENDED -D_DEFAULT_SOURCE -Dunix -fcommon -I. -Werror
 LDFLAGS =
 LIBS =
+
+.PHONY: all clean
+.SUFFIXES: .c .o
 
 @output@: @objects@
 	$(CC) $(LDFLAGS) -o $@ @objects@ $(LIBS)
