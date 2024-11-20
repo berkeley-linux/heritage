@@ -59,6 +59,10 @@ static char sccsid[] = "@(#)du.c	8.5 (Berkeley) 5/4/95";
 int	 linkchk __P((FTSENT *));
 void	 usage __P((void));
 
+#ifdef __linux__
+char* getbsize();
+#endif
+
 int
 main(argc, argv)
 	int argc;
@@ -141,6 +145,7 @@ main(argc, argv)
 	}
 
 #ifdef __linux__
+	(void)getbsize(&notused, &blocksize);
 #else
 	(void)getbsize(&notused, &blocksize);
 #endif
