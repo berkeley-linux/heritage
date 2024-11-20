@@ -42,14 +42,66 @@ static char sccsid[] = "@(#)uname.c	8.2 (Berkeley) 5/4/95";
 #endif /* not lint */
 
 #include <sys/param.h>
+#ifdef __linux__
+#include <sys/utsname.h>
+#else
 #include <sys/sysctl.h>
+#endif
 
 #include <err.h>
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
 
 void usage __P((void));
+
+#ifdef __linux__
+#define CTL_KERN 0
+#define KERN_OSTYPE 0
+#define KERN_HOSTNAME 1
+#define KERN_OSRELEASE 2
+#define KERN_VERSION 3
+#define CTL_HW 1
+#define HW_MACHINE 0
+int sysctl(mib, cnt, buf, len, newp, newlen)
+	int* mib;
+	size_t cnt;
+	char* buf;
+	size_t len;
+	void* newp;
+	size_t newlen;
+{
+	struct utsname uts;
+	if(cnt != 2){
+		return 1;
+	}
+	uname(&uts);
+	if(mib[0] == CTL_KERN){
+		if(mib[1] == KERN_OSTYPE){
+			strcpy(buf, uts.sysname);
+		}else if(mib[1] == KERN_HOSTNAME){
+			strcpy(buf, uts.nodename);
+		}else if(mib[1] == KERN_OSRELEASE){
+			strcpy(buf, uts.release);
+		}else if(mib[1] == KERN_VERSION){
+			strcpy(buf, uts.version);
+		}else{
+			return 1;
+		}
+		return 0;
+	}else if(mib[1] == CTL_HW){
+		if(mib[1] == HW_MACHINE){
+			strcpy(buf, uts.machine);
+		}else{
+			return 1;
+		}
+		return 0;
+	}else{
+		return 1;
+	}
+}
+#endif
 
 int
 main(argc, argv)

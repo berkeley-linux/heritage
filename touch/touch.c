@@ -146,10 +146,16 @@ main(argc, argv)
 			} else
 				continue;
 
+#ifdef __linux__
+		tv[0].tv_usec = tv[1].tv_usec = 0;
+		if(!aflag) tv[0].tv_sec = sb.st_atime;
+		if(!mflag) tv[1].tv_sec = sb.st_mtime;
+#else
 		if (!aflag)
 			TIMESPEC_TO_TIMEVAL(&tv[0], &sb.st_atimespec);
 		if (!mflag)
 			TIMESPEC_TO_TIMEVAL(&tv[1], &sb.st_mtimespec);
+#endif
 
 		/* Try utimes(2). */
 		if (!utimes(*argv, tv))
@@ -277,8 +283,14 @@ stime_file(fname, tvp)
 
 	if (stat(fname, &sb))
 		err(1, "%s", fname);
+#ifdef __linux__
+	tvp[0].tv_usec = tvp[1].tv_usec = 0;
+	tvp[0].tv_sec = sb.st_atime;
+	tvp[1].tv_sec = sb.st_mtime;
+#else
 	TIMESPEC_TO_TIMEVAL(tvp, &sb.st_atimespec);
 	TIMESPEC_TO_TIMEVAL(tvp + 1, &sb.st_mtimespec);
+#endif
 }
 
 int
@@ -292,7 +304,11 @@ rw(fname, sbp, force)
 
 	/* Try regular files and directories. */
 	if (!S_ISREG(sbp->st_mode) && !S_ISDIR(sbp->st_mode)) {
+#ifdef __linux__
+		warnx("%s: %s", fname, strerror(EINVAL));
+#else
 		warnx("%s: %s", fname, strerror(EFTYPE));
+#endif
 		return (1);
 	}
 
@@ -333,7 +349,7 @@ err:			rval = 1;
 	return (rval);
 }
 
-__dead void
+void
 usage()
 {
 	(void)fprintf(stderr,

@@ -50,6 +50,11 @@ static char sccsid[] = "@(#)reverse.c	8.1 (Berkeley) 6/6/93";
 #include <string.h>
 #include "extern.h"
 
+#ifndef SIZE_T_MAX
+#include <stdint.h>
+#define SIZE_T_MAX SIZE_MAX
+#endif
+
 static void r_buf __P((FILE *));
 static void r_reg __P((FILE *, enum STYLE, long, struct stat *));
 

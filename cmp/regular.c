@@ -47,6 +47,11 @@ static char sccsid[] = "@(#)regular.c	8.3 (Berkeley) 4/2/94";
 
 #include "extern.h"
 
+#ifndef SIZE_T_MAX
+#include <stdint.h>
+#define SIZE_T_MAX SIZE_MAX
+#endif
+
 void
 c_regular(fd1, file1, skip1, len1, fd2, file2, skip2, len2)
 	int fd1, fd2;

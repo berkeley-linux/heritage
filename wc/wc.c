@@ -51,6 +51,10 @@ static char sccsid[] = "@(#)wc.c	8.2 (Berkeley) 5/2/95";
 #include <string.h>
 #include <ctype.h>
 
+#ifndef MAXBSIZE
+#define MAXBSIZE (64 * 1024)
+#endif
+
 u_long tlinect, twordct, tcharct;
 int doline, doword, dochar;
 

@@ -84,7 +84,11 @@ main(argc, argv)
 	 * probably not worthwhile.
 	 */
 	nargs = 5000;
+#ifdef __linux__
+	nline = sysconf(_SC_ARG_MAX) - 4 * 1024;
+#else
 	nline = ARG_MAX - 4 * 1024;
+#endif
 	nflag = xflag = 0;
 	while ((ch = getopt(argc, argv, "n:s:tx")) != EOF)
 		switch(ch) {

@@ -48,6 +48,7 @@ static char sccsid[] = "@(#)fold.c	8.1 (Berkeley) 6/6/93";
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <errno.h>
 
 #define	DEFLINEWIDTH	80
 
@@ -58,8 +59,6 @@ main(argc, argv)
 	int argc;
 	char **argv;
 {
-	extern int errno, optind;
-	extern char *optarg;
 	register int ch;
 	int width;
 	char *p;

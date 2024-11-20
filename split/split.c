@@ -51,6 +51,10 @@ static char sccsid[] = "@(#)split.c	8.3 (Berkeley) 4/25/94";
 #include <string.h>
 #include <unistd.h>
 
+#ifndef MAXBSIZE
+#define MAXBSIZE (64 * 1024)
+#endif
+
 #define DEFLINE	1000			/* Default num lines per file. */
 
 long	 bytecnt;			/* Byte count to split on. */

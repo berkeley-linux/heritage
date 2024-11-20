@@ -140,7 +140,10 @@ main(argc, argv)
 		argv[1] = NULL;
 	}
 
+#ifdef __linux__
+#else
 	(void)getbsize(&notused, &blocksize);
+#endif
 	blocksize /= 512;
 
 	if ((fts = fts_open(argv, ftsoptions, NULL)) == NULL)

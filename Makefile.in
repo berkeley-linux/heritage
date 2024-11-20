@@ -4,7 +4,7 @@
 .SUFFIXES: .c .o
 
 CC = cc
-CFLAGS = -DEXTENDED -Dunix -fcommon -I. -Werror
+CFLAGS = -DEXTENDED -D_DEFAULT_SOURCE -Dunix -fcommon -I. -Werror
 LDFLAGS =
 LIBS =
 

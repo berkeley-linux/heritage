@@ -311,8 +311,11 @@ slurp(F)
 			F->pushbool = 0;
 			continue;
 		}
+#ifdef __linux__
+#else
 		if ((bp = fgetln(F->fp, &len)) == NULL)
 			return;
+#endif
 		if (lp->linealloc <= len + 1) {
 			lp->linealloc += MAX(100, len + 1 - lp->linealloc);
 			if ((lp->line =

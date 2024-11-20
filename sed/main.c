@@ -290,7 +290,10 @@ mf_fgets(sp, spflag)
 	 * Can't use the pointer into the stdio buffer as the process space
 	 * because the ungetc() can cause it to move.
 	 */
+#ifdef __linux__
+#else
 	p = fgetln(f, &len);
+#endif
 	if (ferror(f))
 		err(FATAL, "%s: %s", fname, strerror(errno ? errno : EIO));
 	cspace(sp, p, len, spflag);
