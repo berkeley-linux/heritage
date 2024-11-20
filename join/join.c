@@ -262,6 +262,33 @@ main(argc, argv)
 	exit(0);
 }
 
+#ifdef __linux__
+char*
+fgetln(f, len)
+	FILE* f;
+	size_t* len;
+{
+	char c;
+	char* ret = malloc(1);
+	ret[0] = 0;
+	while(1){
+		if(fread(&c, 1, 1, f) != 1){
+			free(ret);
+			return NULL;
+		}
+		if(c == '\n'){
+			break;
+		}else{
+			int len = strlen(ret);
+			ret = realloc(ret, len + 2);
+			ret[len] = c;
+			ret[len + 1] = 0;
+		}
+	}
+	return ret;
+}
+#endif
+
 void
 slurp(F)
 	INPUT *F;
@@ -311,11 +338,8 @@ slurp(F)
 			F->pushbool = 0;
 			continue;
 		}
-#ifdef __linux__
-#else
 		if ((bp = fgetln(F->fp, &len)) == NULL)
 			return;
-#endif
 		if (lp->linealloc <= len + 1) {
 			lp->linealloc += MAX(100, len + 1 - lp->linealloc);
 			if ((lp->line =

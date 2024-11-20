@@ -243,6 +243,34 @@ again:
 	/* NOTREACHED */
 }
 
+#ifdef __linux__
+char*
+fgetln(f, len)
+	FILE* f;
+	size_t* len;
+{
+	char c;
+	char* ret = malloc(1);
+	ret[0] = 0;
+	while(1){
+		if(fread(&c, 1, 1, f) != 1){
+			free(ret);
+			return NULL;
+		}
+		if(c == '\n'){
+			break;
+		}else{
+			int len = strlen(ret);
+			ret = realloc(ret, len + 2);
+			ret[len] = c;
+			ret[len + 1] = 0;
+		}
+	}
+	return ret;
+}
+#endif
+
+
 /*
  * Like fgets, but go through the list of files chaining them together.
  * Set len to the length of the line.
@@ -290,10 +318,7 @@ mf_fgets(sp, spflag)
 	 * Can't use the pointer into the stdio buffer as the process space
 	 * because the ungetc() can cause it to move.
 	 */
-#ifdef __linux__
-#else
 	p = fgetln(f, &len);
-#endif
 	if (ferror(f))
 		err(FATAL, "%s: %s", fname, strerror(errno ? errno : EIO));
 	cspace(sp, p, len, spflag);
