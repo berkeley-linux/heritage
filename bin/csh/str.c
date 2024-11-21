@@ -43,15 +43,26 @@ static char sccsid[] = "@(#)str.c	8.1 (Berkeley) 5/31/93";
  */
 
 #include <sys/types.h>
+#include <string.h>
 #if __STDC__
 # include <stdarg.h>
 #else
 # include <varargs.h>
 #endif
+#ifndef __linux__
 #include <vis.h>
+#endif
 
 #include "csh.h"
 #include "extern.h"
+
+#ifdef __linux__
+#define VIS_NOSLASH 0
+void vis(char* str, int c, int flags, int nextc);
+void strvis(char* dest, char* src, int flags){
+	strcpy(dest, src);
+}
+#endif
 
 #ifdef SHORT_STRINGS
 

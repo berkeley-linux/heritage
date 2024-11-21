@@ -48,6 +48,16 @@ static char sccsid[] = "@(#)stat_flags.c	8.2 (Berkeley) 7/28/94";
 	prefix = ",";							\
 }
 
+#ifdef __linux__
+#define UF_APPEND 0
+#define UF_IMMUTABLE 0
+#define UF_NODUMP 0
+#define UF_OPAQUE 0
+#define SF_APPEND 0
+#define SF_ARCHIVED 0
+#define SF_IMMUTABLE 0
+#endif
+
 /*
  * flags_to_string --
  *	Convert stat flags to a comma-separated string.  If no flags

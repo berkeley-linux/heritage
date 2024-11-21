@@ -73,6 +73,16 @@ static struct	process
 		*pgetcurr __P((struct process *));
 static void	 okpcntl __P((void));
 
+#ifdef __linux
+union wait {
+	int w_status;
+	int w_stopsig;
+	int w_termsig;
+	int w_coredump;
+	int w_retcode;
+};
+#endif
+
 /*
  * pchild - called at interrupt level by the SIGCHLD signal
  *	indicating that at least one child has terminated or stopped
@@ -114,7 +124,11 @@ found:
     if (pid == atoi(short2str(value(STRchild))))
 	unsetv(STRchild);
     pp->p_flags &= ~(PRUNNING | PSTOPPED | PREPORTED);
+#ifdef __linux__
+    if (WIFSTOPPED(w.w_status)) {
+#else
     if (WIFSTOPPED(w)) {
+#endif
 	pp->p_flags |= PSTOPPED;
 	pp->p_reason = w.w_stopsig;
     }
@@ -123,7 +137,11 @@ found:
 	    (void) gettimeofday(&pp->p_etime, NULL);
 
 	pp->p_rusage = ru;
+#ifdef __linux__
+	if (WIFSIGNALED(w.w_status)) {
+#else
 	if (WIFSIGNALED(w)) {
+#endif
 	    if (w.w_termsig == SIGINT)
 		pp->p_flags |= PINTERRUPTED;
 	    else

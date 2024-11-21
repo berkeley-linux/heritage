@@ -50,7 +50,11 @@ static char sccsid[] = "@(#)print.c	8.5 (Berkeley) 7/28/94";
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#ifndef __linux__
 #include <tzfile.h>
+#else
+#include <sys/sysmacros.h>
+#endif
 #include <unistd.h>
 #include <utmp.h>
 
@@ -63,6 +67,128 @@ static void	printtime __P((time_t));
 static int	printtype __P((u_int));
 
 #define	IS_NOPRINT(p)	((p)->fts_number == NO_PRINT)
+
+#ifdef __linux__
+#define SECSPERMIN      60
+#define MINSPERHOUR     60
+#define HOURSPERDAY     24
+#define DAYSPERWEEK     7
+#define DAYSPERNYEAR    365
+#define DAYSPERLYEAR    366
+#define SECSPERHOUR     (SECSPERMIN * MINSPERHOUR)
+#define SECSPERDAY      ((int) SECSPERHOUR * HOURSPERDAY)
+#define MONSPERYEAR     12
+
+void
+strmode(mode_t mode, char *p)
+{
+	 /* print type */
+	switch (mode & S_IFMT) {
+	case S_IFDIR:			/* directory */
+		*p++ = 'd';
+		break;
+	case S_IFCHR:			/* character special */
+		*p++ = 'c';
+		break;
+	case S_IFBLK:			/* block special */
+		*p++ = 'b';
+		break;
+	case S_IFREG:			/* regular */
+		*p++ = '-';
+		break;
+	case S_IFLNK:			/* symbolic link */
+		*p++ = 'l';
+		break;
+	case S_IFSOCK:			/* socket */
+		*p++ = 's';
+		break;
+#ifdef S_IFIFO
+	case S_IFIFO:			/* fifo */
+		*p++ = 'p';
+		break;
+#endif
+#ifdef S_IFWHT
+	case S_IFWHT:			/* whiteout */
+		*p++ = 'w';
+		break;
+#endif
+	default:			/* unknown */
+		*p++ = '?';
+		break;
+	}
+	/* usr */
+	if (mode & S_IRUSR)
+		*p++ = 'r';
+	else
+		*p++ = '-';
+	if (mode & S_IWUSR)
+		*p++ = 'w';
+	else
+		*p++ = '-';
+	switch (mode & (S_IXUSR | S_ISUID)) {
+	case 0:
+		*p++ = '-';
+		break;
+	case S_IXUSR:
+		*p++ = 'x';
+		break;
+	case S_ISUID:
+		*p++ = 'S';
+		break;
+	case S_IXUSR | S_ISUID:
+		*p++ = 's';
+		break;
+	}
+	/* group */
+	if (mode & S_IRGRP)
+		*p++ = 'r';
+	else
+		*p++ = '-';
+	if (mode & S_IWGRP)
+		*p++ = 'w';
+	else
+		*p++ = '-';
+	switch (mode & (S_IXGRP | S_ISGID)) {
+	case 0:
+		*p++ = '-';
+		break;
+	case S_IXGRP:
+		*p++ = 'x';
+		break;
+	case S_ISGID:
+		*p++ = 'S';
+		break;
+	case S_IXGRP | S_ISGID:
+		*p++ = 's';
+		break;
+	}
+	/* other */
+	if (mode & S_IROTH)
+		*p++ = 'r';
+	else
+		*p++ = '-';
+	if (mode & S_IWOTH)
+		*p++ = 'w';
+	else
+		*p++ = '-';
+	switch (mode & (S_IXOTH | S_ISVTX)) {
+	case 0:
+		*p++ = '-';
+		break;
+	case S_IXOTH:
+		*p++ = 'x';
+		break;
+	case S_ISVTX:
+		*p++ = 'T';
+		break;
+	case S_IXOTH | S_ISVTX:
+		*p++ = 't';
+		break;
+	}
+	*p++ = ' ';		/* will be a '+' if ACL's implemented */
+	*p = '\0';
+}
+#endif
 
 void
 printscol(dp)
@@ -264,9 +390,11 @@ printtype(mode)
 	case S_IFSOCK:
 		(void)putchar('=');
 		return (1);
+#ifndef __linux__
 	case S_IFWHT:
 		(void)putchar('%');
 		return (1);
+#endif
 	}
 	if (mode & (S_IXUSR | S_IXGRP | S_IXOTH)) {
 		(void)putchar('*');
