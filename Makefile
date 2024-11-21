@@ -3,7 +3,7 @@
 TOPDIR = .
 include Config.mk
 
-.PHONY: all build-usr-bin build-usr-sbin build-bin clean makefiles distclean
+.PHONY: all build-usr-bin build-usr-sbin build-bin clean install makefiles distclean
 
 all: build-usr-bin build-usr-sbin build-bin
 
@@ -49,6 +49,17 @@ clean: makefiles
 		$(MAKE) -C $$i clean TOPDIR="$$TOPDIR" ; \
 	done
 	rm -f bin/csh/const.h bin/csh/csherr.h
+
+install: all
+	TOPDIR="`pwd`" && cd usr.bin && for i in *; do \
+		$(MAKE) -C $$i install TOPDIR="$$TOPDIR" ; \
+	done
+	TOPDIR="`pwd`" && cd usr.sbin && for i in *; do \
+		$(MAKE) -C $$i install TOPDIR="$$TOPDIR" ; \
+	done
+	TOPDIR="`pwd`" && cd bin && for i in *; do \
+		$(MAKE) -C $$i install TOPDIR="$$TOPDIR" ; \
+	done
 
 distclean: makefiles clean
 	rm -f */*/Makefile

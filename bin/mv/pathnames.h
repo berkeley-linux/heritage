@@ -33,5 +33,5 @@
  *	@(#)pathnames.h	8.1 (Berkeley) 5/31/93
  */
 
-#define	_PATH_RM	"/bin/rm"
-#define	_PATH_CP	"/bin/cp"
+#define	_PATH_RM	PREFIX "/bin/rm"
+#define	_PATH_CP	PREFIX "/bin/cp"

@@ -33,7 +33,7 @@
  *	@(#)pathnames.h	8.1 (Berkeley) 5/31/93
  */
 
-#define	_PATH_BIN		"/bin"
+#define	_PATH_BIN		PREFIX "/bin"
 #define	_PATH_DOTCSHRC		"/etc/csh.cshrc"
 #define	_PATH_DOTLOGIN		"/etc/csh.login"
 #define	_PATH_DOTLOGOUT		"/etc/csh.logout"

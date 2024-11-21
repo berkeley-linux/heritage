@@ -2,7 +2,7 @@
 
 include $(TOPDIR)/Config.mk
 
-.PHONY: all clean
+.PHONY: all install clean
 .SUFFIXES: .c .o
 
 @output@: @objects@
@@ -10,6 +10,10 @@ include $(TOPDIR)/Config.mk
 
 .c.o:
 	$(CC) $(CFLAGS) -c -o $@ $<
+
+install: @output@
+	mkdir -p $(PREFIX)/bin/
+	cp @output@ $(PREFIX)/bin/
 
 clean:
 	rm -f *.o @output@
