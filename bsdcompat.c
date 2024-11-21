@@ -12,7 +12,9 @@
 #define S_IFWHT 0
 #define S_ISWHT(x) 0
 #define undelete remove
-#define _POSIX_VDISABLE -1
+#ifndef _POSIX_VDISABLE
+#define _POSIX_VDISABLE '\0'
+#endif
 #define TTYDISC 0
 #define SLIPDISC 1
 #define TABLDISC 2

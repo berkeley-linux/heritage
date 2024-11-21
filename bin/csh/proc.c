@@ -55,8 +55,10 @@ static char sccsid[] = "@(#)proc.c	8.2 (Berkeley) 3/22/95";
 #define BIGINDEX	9	/* largest desirable job index */
 
 #ifdef __linux__
+#define BSDCOMPAT_IMPLEMENTATION
 #include <stdio_ext.h>
 #define fpurge __fpurge
+#include <bsdcompat.c>
 #endif
 
 static struct rusage zru;
