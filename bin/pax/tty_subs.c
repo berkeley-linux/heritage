@@ -58,6 +58,10 @@ static char sccsid[] = "@(#)tty_subs.c	8.2 (Berkeley) 4/18/94";
 #include <varargs.h>
 #endif
 
+#ifdef __linux__
+#include <bsdcompat.c>
+#endif
+
 /*
  * routines that deal with I/O to and from the user
  */
@@ -92,7 +96,7 @@ tty_init()
 	}
 
 	if (iflag) {
-		warn(1, "Fatal error, cannot open %s", DEVTTY);
+		pax_warn(1, "Fatal error, cannot open %s", DEVTTY);
 		return(-1);
 	}
 	return(0);
@@ -160,17 +164,17 @@ tty_read(str, len)
 }
 
 /*
- * warn()
+ * pax_warn()
  *	write a warning message to stderr. if "set" the exit value of pax
  *	will be non-zero.
  */
 
 #if __STDC__
 void
-warn(int set, char *fmt, ...)
+pax_warn(int set, char *fmt, ...)
 #else
 void
-warn(set, fmt, va_alist)
+pax_warn(set, fmt, va_alist)
 	int set;
 	char *fmt;
 	va_dcl
@@ -240,6 +244,6 @@ syswarn(set, errnum, fmt, va_alist)
 	 * format and print the errno
 	 */
 	if (errnum > 0)
-		(void)fprintf(stderr, " <%s>", sys_errlist[errnum]);
+		(void)fprintf(stderr, " <%s>", strerror(errnum));
 	(void)fputc('\n', stderr);
 }

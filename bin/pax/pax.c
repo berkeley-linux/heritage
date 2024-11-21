@@ -59,6 +59,11 @@ static char sccsid[] = "@(#)pax.c	8.2 (Berkeley) 4/18/94";
 #include "extern.h"
 static int gen_init __P((void));
 
+#ifdef __linux__
+#define BSDCOMPAT_IMPLEMENTATION
+#include <bsdcompat.c>
+#endif
+
 /*
  * PAX main routines, general globals and some simple start up routines
  */
@@ -281,9 +286,9 @@ sig_cleanup(which_sig)
 	 */
 	vflag = vfpart = 1;
 	if (which_sig == SIGXCPU)
-		warn(0, "Cpu time limit reached, cleaning up.");
+		pax_warn(0, "Cpu time limit reached, cleaning up.");
 	else
-		warn(0, "Signal caught, cleaning up.");
+		pax_warn(0, "Signal caught, cleaning up.");
 
 	ar_close();
 	proc_dir();
@@ -361,7 +366,7 @@ gen_init()
 	    (sigaddset(&s_mask,SIGINT) < 0)||(sigaddset(&s_mask,SIGHUP) < 0) ||
 	    (sigaddset(&s_mask,SIGPIPE) < 0)||(sigaddset(&s_mask,SIGQUIT)<0) ||
 	    (sigaddset(&s_mask,SIGXCPU) < 0)||(sigaddset(&s_mask,SIGXFSZ)<0)) {
-		warn(1, "Unable to set up signal mask");
+		pax_warn(1, "Unable to set up signal mask");
 		return(-1);
 	}
 	n_hand.sa_mask = s_mask;

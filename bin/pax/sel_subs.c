@@ -51,6 +51,7 @@ static char sccsid[] = "@(#)sel_subs.c	8.1 (Berkeley) 5/31/93";
 #include <strings.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <time.h>
 #include "pax.h"
 #include "sel_subs.h"
 #include "extern.h"

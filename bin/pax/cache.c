@@ -54,6 +54,10 @@ static char sccsid[] = "@(#)cache.c	8.1 (Berkeley) 5/31/93";
 #include "cache.h"
 #include "extern.h"
 
+#ifdef __linux__
+#include <bsdcompat.c>
+#endif
+
 /*
  * routines that control user, group, uid and gid caches (for the archive
  * member print routine).

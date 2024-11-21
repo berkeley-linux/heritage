@@ -45,13 +45,20 @@ static char sccsid[] = "@(#)gen_subs.c	8.1 (Berkeley) 5/31/93";
 #include <sys/param.h>
 #include <stdio.h>
 #include <ctype.h>
+#ifndef __linux__
 #include <tzfile.h>
+#endif
 #include <utmp.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "pax.h"
 #include "extern.h"
+
+#ifdef __linux__
+#include <bsdcompat.c>
+#endif
 
 /*
  * a collection of general purpose subroutines used by pax

@@ -61,6 +61,11 @@ static char sccsid[] = "@(#)mv.c	8.2 (Berkeley) 4/2/94";
 
 #include "pathnames.h"
 
+#ifdef __linux__
+#define BSDCOMPAT_IMPLEMENTATION
+#include <bsdcompat.c>
+#endif
+
 int fflg, iflg;
 
 int	copy __P((char *, char *));

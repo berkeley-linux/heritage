@@ -56,6 +56,10 @@ static char sccsid[] = "@(#)options.c	8.2 (Berkeley) 4/18/94";
 #include "tar.h"
 #include "extern.h"
 
+#ifdef __linux__
+#include <bsdcompat.c>
+#endif
+
 /*
  * Routines which handle command line options
  */
