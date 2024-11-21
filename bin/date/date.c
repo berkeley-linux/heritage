@@ -52,6 +52,7 @@ static char sccsid[] = "@(#)date.c	8.2 (Berkeley) 4/28/95";
 #include <string.h>
 #include <syslog.h>
 #include <unistd.h>
+#include <time.h>
 
 #include "extern.h"
 

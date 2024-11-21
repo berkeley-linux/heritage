@@ -381,6 +381,10 @@ handleone(str, vl, action)
     return (str);
 }
 
+#ifdef __linux__
+#define GLOB_QUOTE 0
+#endif
+
 static Char **
 libglob(vl)
     Char  **vl;
@@ -403,10 +407,12 @@ libglob(vl)
     do {
 	ptr = short2qstr(*vl);
 	switch (glob(ptr, gflgs, 0, &globv)) {
+#ifndef __linux__
 	case GLOB_ABEND:
 	    setname(vis_str(*vl));
 	    stderror(ERR_NAME | ERR_GLOB);
 	    /* NOTREACHED */
+#endif
 	case GLOB_NOSPACE:
 	    stderror(ERR_NOMEM);
 	    /* NOTREACHED */
@@ -414,7 +420,11 @@ libglob(vl)
 	    break;
 	}
 	if (globv.gl_flags & GLOB_MAGCHAR) {
+#ifdef __linux__
+	    match |= (globv.gl_pathc != 0);
+#else
 	    match |= (globv.gl_matchc != 0);
+#endif
 	    magic = 1;
 	}
 	gflgs |= GLOB_APPEND;

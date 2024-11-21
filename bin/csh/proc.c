@@ -54,6 +54,11 @@ static char sccsid[] = "@(#)proc.c	8.2 (Berkeley) 3/22/95";
 
 #define BIGINDEX	9	/* largest desirable job index */
 
+#ifdef __linux__
+#include <stdio_ext.h>
+#define fpurge __fpurge
+#endif
+
 static struct rusage zru;
 
 static void	 pflushall __P((void));
@@ -745,8 +750,8 @@ pprint(pp, flag)
                             && (reason != SIGPIPE
                                 || (pp->p_flags & PPOU) == 0))) {
 			(void) fprintf(cshout, format,
-				       sys_siglist[(unsigned char)
-						   pp->p_reason]);
+				       strsignal((unsigned char)
+						   pp->p_reason));
 			hadnl = 0;
 		    }
 		    break;
@@ -973,7 +978,7 @@ dokill(v, t)
     if (v[0] && v[0][0] == '-') {
 	if (v[0][1] == 'l') {
 	    for (signum = 1; signum < NSIG; signum++) {
-		(void) fprintf(cshout, "%s ", sys_signame[signum]);
+		(void) fprintf(cshout, "%s ", strsignal(signum));
 		if (signum == NSIG / 2)
 		    (void) fputc('\n', cshout);
 	    }
@@ -991,7 +996,7 @@ dokill(v, t)
 		name += 3;
 
 	    for (signum = 1; signum < NSIG; signum++)
-		if (!strcasecmp(sys_signame[signum], name))
+		if (!strcasecmp(strsignal(signum), name))
 		    break;
 
 	    if (signum == NSIG) {

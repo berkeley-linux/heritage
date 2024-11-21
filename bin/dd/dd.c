@@ -59,6 +59,7 @@ static char sccsid[] = "@(#)dd.c	8.5 (Berkeley) 4/2/94";
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <time.h>
 
 #include "dd.h"
 #include "extern.h"
@@ -85,7 +86,9 @@ main(argc, argv)
 	jcl(argv);
 	setup();
 
+#ifndef __linux__
 	(void)signal(SIGINFO, summaryx);
+#endif
 	(void)signal(SIGINT, terminate);
 
 	atexit(summary);

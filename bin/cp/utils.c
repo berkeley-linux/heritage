@@ -51,6 +51,10 @@ static char sccsid[] = "@(#)utils.c	8.3 (Berkeley) 4/1/94";
 
 #include "extern.h"
 
+#ifndef MAXBSIZE
+#define MAXBSIZE (64 * 1024)
+#endif
+
 int
 copy_file(entp, dne)
 	FTSENT *entp;
@@ -242,8 +246,14 @@ setfile(fs, fd)
 	rval = 0;
 	fs->st_mode &= S_ISUID | S_ISGID | S_IRWXU | S_IRWXG | S_IRWXO;
 
+#ifdef __linux__
+	tv[0].tv_usec = tv[1].tv_usec = 0;
+	tv[0].tv_sec = fs->st_atime;
+	tv[1].tv_sec = fs->st_mtime;
+#else
 	TIMESPEC_TO_TIMEVAL(&tv[0], &fs->st_atimespec);
 	TIMESPEC_TO_TIMEVAL(&tv[1], &fs->st_mtimespec);
+#endif
 	if (utimes(to.p_path, tv)) {
 		warn("utimes: %s", to.p_path);
 		rval = 1;
@@ -267,11 +277,13 @@ setfile(fs, fd)
 		rval = 1;
 	}
 
+#ifndef __linux__
 	if (fd ?
 	    fchflags(fd, fs->st_flags) : chflags(to.p_path, fs->st_flags)) {
 		warn("chflags: %s", to.p_path);
 		rval = 1;
 	}
+#endif
 	return (rval);
 }
 

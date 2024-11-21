@@ -31,6 +31,8 @@
  * SUCH DAMAGE.
  */
 
+#define _GNU_SOURCE
+
 #ifndef lint
 static char copyright[] =
 "@(#) Copyright (c) 1980, 1991, 1993\n\
@@ -51,7 +53,10 @@ static char sccsid[] = "@(#)csh.c	8.4 (Berkeley) 4/29/95";
 #include <string.h>
 #include <locale.h>
 #include <unistd.h>
+#include <time.h>
+#ifndef __linux__
 #include <vis.h>
+#endif
 #if __STDC__
 # include <stdarg.h>
 #else
@@ -78,6 +83,121 @@ extern bool NLSMapsAreInited;
  * Christos Zoulas, Cornell University
  * June, 1991
  */
+
+#ifdef __linux__
+#define VIS_NOSLASH 0
+void vis(char* str, int c, int flags, int nextc){
+}
+struct funopen_cookie {
+	void *orig_cookie;
+
+	int (*readfn)(void *cookie, char *buf, int size);
+	int (*writefn)(void *cookie, const char *buf, int size);
+	off_t (*seekfn)(void *cookie, off_t offset, int whence);
+	int (*closefn)(void *cookie);
+};
+
+static ssize_t
+funopen_read(void *cookie, char *buf, size_t size)
+{
+	struct funopen_cookie *cookiewrap = cookie;
+
+	if (cookiewrap->readfn == NULL) {
+		errno = EBADF;
+		return -1;
+	}
+
+	return cookiewrap->readfn(cookiewrap->orig_cookie, buf, size);
+}
+
+static ssize_t
+funopen_write(void *cookie, const char *buf, size_t size)
+{
+	struct funopen_cookie *cookiewrap = cookie;
+
+	if (cookiewrap->writefn == NULL)
+		return EOF;
+
+	return cookiewrap->writefn(cookiewrap->orig_cookie, buf, size);
+}
+
+static int
+funopen_seek(void *cookie, off_t *offset, int whence)
+{
+	struct funopen_cookie *cookiewrap = cookie;
+	off_t soff = *offset;
+
+	if (cookiewrap->seekfn == NULL) {
+		errno = ESPIPE;
+		return -1;
+	}
+
+	soff = cookiewrap->seekfn(cookiewrap->orig_cookie, soff, whence);
+	*offset = soff;
+
+	return *offset;
+}
+
+static int
+funopen_close(void *cookie)
+{
+	struct funopen_cookie *cookiewrap = cookie;
+	int rc;
+
+	if (cookiewrap->closefn)
+		rc = cookiewrap->closefn(cookiewrap->orig_cookie);
+	else
+		rc = 0;
+
+	free(cookiewrap);
+
+	return rc;
+}
+
+FILE *
+funopen(const void *cookie,
+        int (*readfn)(void *cookie, char *buf, int size),
+        int (*writefn)(void *cookie, const char *buf, int size),
+        off_t (*seekfn)(void *cookie, off_t offset, int whence),
+        int (*closefn)(void *cookie))
+{
+	struct funopen_cookie *cookiewrap;
+	cookie_io_functions_t funcswrap = {
+		.read = funopen_read,
+		.write = funopen_write,
+		.seek = funopen_seek,
+		.close = funopen_close,
+	};
+	const char *mode;
+
+	if (readfn) {
+		if (writefn == NULL)
+			mode = "r";
+		else
+			mode = "r+";
+	} else if (writefn) {
+		mode = "w";
+	} else {
+		errno = EINVAL;
+		return NULL;
+	}
+
+	cookiewrap = malloc(sizeof(*cookiewrap));
+	if (cookiewrap == NULL)
+		return NULL;
+
+	cookiewrap->orig_cookie = (void *)cookie;
+	cookiewrap->readfn = readfn;
+	cookiewrap->writefn = writefn;
+	cookiewrap->seekfn = seekfn;
+	cookiewrap->closefn = closefn;
+
+	return fopencookie(cookiewrap, mode, funcswrap);
+}
+
+#include <stdio_ext.h>
+#define fpurge __fpurge
+#endif
 
 Char   *dumphist[] = {STRhistory, STRmh, 0, 0};
 Char   *loadhist[] = {STRsource, STRmh, STRtildothist, 0};
