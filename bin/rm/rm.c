@@ -60,6 +60,12 @@ static char sccsid[] = "@(#)rm.c	8.8 (Berkeley) 4/27/95";
 #include <bsdcompat.c>
 #endif
 
+#ifdef __OpenBSD__
+#define S_IFWHT 0
+#define S_ISWHT(x) 0
+#define undelete remove
+#endif
+
 int dflag, eval, fflag, iflag, Pflag, Wflag, stdin_ok;
 
 int	check __P((char *, char *, struct stat *));
@@ -155,8 +161,10 @@ rm_tree(argv)
 	flags = FTS_PHYSICAL;
 	if (!needstat)
 		flags |= FTS_NOSTAT;
+#ifndef __OpenBSD__
 	if (Wflag)
 		flags |= FTS_WHITEOUT;
+#endif
 	if (!(fts = fts_open(argv, flags, (int (*)())NULL)))
 		err(1, NULL);
 	while ((p = fts_read(fts)) != NULL) {
@@ -214,11 +222,13 @@ rm_tree(argv)
 				continue;
 			break;
 
+#ifndef __OpenBSD__
 		case FTS_W:
 			if (!undelete(p->fts_accpath) ||
 			    fflag && errno == ENOENT)
 				continue;
 			break;
+#endif
 
 		default:
 			if (Pflag)

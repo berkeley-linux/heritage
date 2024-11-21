@@ -173,8 +173,10 @@ pushback(string)
     tty.c_lflag &= ~(ECHOKE | ECHO | ECHOE | ECHOK | ECHONL | ECHOPRT | ECHOCTL);
     (void) tcsetattr(SHOUT, TCSANOW, &tty);
 
+#ifndef __OpenBSD__
     for (p = string; (c = *p) != '\0'; p++)
 	(void) ioctl(SHOUT, TIOCSTI, (ioctl_t) & c);
+#endif
     (void) tcsetattr(SHOUT, TCSANOW, &tty_normal);
     sigprocmask(SIG_SETMASK, &osigset, NULL);
 }

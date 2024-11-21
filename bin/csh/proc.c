@@ -75,7 +75,7 @@ static struct	process
 		*pgetcurr __P((struct process *));
 static void	 okpcntl __P((void));
 
-#if defined(__linux__) || defined(__FreeBSD__)
+#if defined(__linux__) || defined(__FreeBSD__) || defined(__OpenBSD__)
 #define NO_UNION_WAIT
 union wait {
 	int w_status;

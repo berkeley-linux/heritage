@@ -47,7 +47,9 @@ static char sccsid[] = "@(#)gen_subs.c	8.1 (Berkeley) 5/31/93";
 #include <ctype.h>
 #ifndef __linux__
 #ifndef __FreeBSD__
+#ifndef __OpenBSD__
 #include <tzfile.h>
+#endif
 #endif
 #endif
 #ifndef __FreeBSD__
@@ -64,7 +66,7 @@ static char sccsid[] = "@(#)gen_subs.c	8.1 (Berkeley) 5/31/93";
 #include <bsdcompat.c>
 #endif
 
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__OpenBSD__)
 #include <datedata.h>
 #endif
 

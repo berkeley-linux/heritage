@@ -52,7 +52,9 @@ static char sccsid[] = "@(#)print.c	8.5 (Berkeley) 7/28/94";
 #include <time.h>
 #ifndef __linux__
 #ifndef __FreeBSD__
+#ifndef __OpenBSD__
 #include <tzfile.h>
+#endif
 #endif
 #else
 #include <sys/sysmacros.h>
@@ -62,7 +64,7 @@ static char sccsid[] = "@(#)print.c	8.5 (Berkeley) 7/28/94";
 #include <utmp.h>
 #endif
 
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__OpenBSD__)
 #include <datedata.h>
 #endif
 
@@ -281,9 +283,11 @@ printtype(mode)
 		(void)putchar('=');
 		return (1);
 #ifndef __linux__
+#ifndef __OpenBSD__
 	case S_IFWHT:
 		(void)putchar('%');
 		return (1);
+#endif
 #endif
 	}
 	if (mode & (S_IXUSR | S_IXGRP | S_IXOTH)) {
