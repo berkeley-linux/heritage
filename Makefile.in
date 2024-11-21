@@ -14,6 +14,14 @@ include $(TOPDIR)/Config.mk
 install: @output@
 	mkdir -p $(PREFIX)/bin/
 	cp @output@ $(PREFIX)/bin/
+	if [ -f "@output@.1" ]; then \
+		mkdir -p $(PREFIX)/share/man/man1 ; \
+		cp @output@.1 $(PREFIX)/share/man/man1/ ; \
+	fi
+	if [ -f "@output@.8" ]; then \
+		mkdir -p $(PREFIX)/share/man/man8 ; \
+		cp @output@.8 $(PREFIX)/share/man/man8/ ; \
+	fi
 
 clean:
 	rm -f *.o @output@
