@@ -74,6 +74,7 @@ static struct	process
 static void	 okpcntl __P((void));
 
 #if defined(__linux__) || defined(__FreeBSD__)
+#define NO_UNION_WAIT
 union wait {
 	int w_status;
 	int w_stopsig;
@@ -124,7 +125,7 @@ found:
     if (pid == atoi(short2str(value(STRchild))))
 	unsetv(STRchild);
     pp->p_flags &= ~(PRUNNING | PSTOPPED | PREPORTED);
-#if
+#ifdef NO_UNION_WAIT
     if (WIFSTOPPED(w.w_status)) {
 #else
     if (WIFSTOPPED(w)) {
@@ -137,7 +138,7 @@ found:
 	    (void) gettimeofday(&pp->p_etime, NULL);
 
 	pp->p_rusage = ru;
-#ifdef __linux__
+#ifdef NO_UNION_WAIT
 	if (WIFSIGNALED(w.w_status)) {
 #else
 	if (WIFSIGNALED(w)) {
