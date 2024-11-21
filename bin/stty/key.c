@@ -42,9 +42,14 @@ static char sccsid[] = "@(#)key.c	8.4 (Berkeley) 2/20/95";
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <termios.h>
 
 #include "stty.h"
 #include "extern.h"
+
+#ifdef __linux__
+#include <bsdcompat.c>
+#endif
 
 __BEGIN_DECLS
 void	f_all __P((struct info *));
@@ -189,13 +194,16 @@ void
 f_extproc(ip)
 	struct info *ip;
 {
-
 	if (ip->off) {
 		int tmp = 0;
+#ifndef __linux__
 		(void)ioctl(ip->fd, TIOCEXT, &tmp);
+#endif
 	} else {
 		int tmp = 1;
+#ifndef __linux__
 		(void)ioctl(ip->fd, TIOCEXT, &tmp);
+#endif
 	}
 	ip->set = 1;
 }

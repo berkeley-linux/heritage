@@ -121,7 +121,7 @@ ftree_start()
 		ftsopts |= FTS_PHYSICAL;
 	if (Hflag)
 #	ifdef NET2_FTS
-		warn(0, "The -H flag is not supported on this version");
+		pax_warn(0, "The -H flag is not supported on this version");
 #	else
 		ftsopts |= FTS_COMFOLLOW;
 #	endif
@@ -129,7 +129,7 @@ ftree_start()
 		ftsopts |= FTS_XDEV;
 
 	if ((fthead == NULL) && ((farray[0] = malloc(PAXPATHLEN+2)) == NULL)) {
-		warn(1, "Unable to allocate memory for file name buffer");
+		pax_warn(1, "Unable to allocate memory for file name buffer");
 		return(-1);
 	}
 
@@ -164,7 +164,7 @@ ftree_add(str)
 	 * simple check for bad args
 	 */
 	if ((str == NULL) || (*str == '\0')) {
-		warn(0, "Invalid file name arguement");
+		pax_warn(0, "Invalid file name arguement");
 		return(-1);
 	}
 
@@ -174,7 +174,7 @@ ftree_add(str)
 	 * trailing / the user may pass us. (watch out for / by itself).
 	 */
 	if ((ft = (FTREE *)malloc(sizeof(FTREE))) == NULL) {
-		warn(0, "Unable to allocate memory for filename");
+		pax_warn(0, "Unable to allocate memory for filename");
 		return(-1);
 	}
 
@@ -262,7 +262,7 @@ ftree_chk()
 		if (ft->refcnt > 0)
 			continue;
 		if (wban == 0) {
-			warn(1,"WARNING! These file names were not selected:");
+			pax_warn(1,"WARNING! These file names were not selected:");
 			++wban;
 		}
 		(void)fprintf(stderr, "%s\n", ft->fname);
@@ -422,7 +422,7 @@ next_file(arcn)
 			/*
 			 * fts claims a file system cycle
 			 */
-			warn(1,"File system cycle found at %s",ftent->fts_path);
+			pax_warn(1,"File system cycle found at %s",ftent->fts_path);
 			continue;
 		case FTS_DNR:
 #			ifdef NET2_FTS

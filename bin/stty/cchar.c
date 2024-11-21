@@ -46,6 +46,10 @@ static char sccsid[] = "@(#)cchar.c	8.5 (Berkeley) 4/2/94";
 #include "stty.h"
 #include "extern.h"
 
+#ifdef __linux__
+#include <bsdcompat.c>
+#endif
+
 /*
  * Special control characters.
  *
@@ -55,7 +59,11 @@ static char sccsid[] = "@(#)cchar.c	8.5 (Berkeley) 4/2/94";
  */
 struct cchar cchars1[] = {
 	{ "discard",	VDISCARD, 	CDISCARD },
+#ifdef __linux__
+	{ "dsusp", 	VSUSP,		CSUSP },
+#else
 	{ "dsusp", 	VDSUSP,		CDSUSP },
+#endif
 	{ "eof",	VEOF,		CEOF },
 	{ "eol",	VEOL,		CEOL },
 	{ "eol2",	VEOL2,		CEOL },
@@ -67,7 +75,9 @@ struct cchar cchars1[] = {
 	{ "quit",	VQUIT,		CQUIT },
 	{ "reprint",	VREPRINT, 	CREPRINT },
 	{ "start",	VSTART,		CSTART },
+#ifndef __linux__
 	{ "status",	VSTATUS, 	CSTATUS },
+#endif
 	{ "stop",	VSTOP,		CSTOP },
 	{ "susp",	VSUSP,		CSUSP },
 	{ "time",	VTIME,		CTIME },

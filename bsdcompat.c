@@ -16,6 +16,14 @@
 #define SECSPERDAY      ((int) SECSPERHOUR * HOURSPERDAY)
 #define MONSPERYEAR     12
 #define QUAD_MAX 0x7fffffffffffffffLL
+#define S_IFWHT 0
+#define S_ISWHT(x) 0
+#define undelete remove
+#define _POSIX_VDISABLE -1
+#define TTYDISC 0
+#define SLIPDISC 1
+#define TABLDISC 2
+#define ALTWERASE 0
 
 #ifndef BSDCOMPAT_IMPLEMENTATION
 char* user_from_uid(uid_t uid, int nouser);

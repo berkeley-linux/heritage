@@ -44,6 +44,10 @@ static char sccsid[] = "@(#)print.c	8.6 (Berkeley) 4/16/94";
 #include "stty.h"
 #include "extern.h"
 
+#ifdef __linux__
+#include <bsdcompat.c>
+#endif
+
 static void  binit __P((char *));
 static void  bput __P((char *));
 static char *ccval __P((struct cchar *, int));
@@ -114,7 +118,9 @@ print(tp, wp, ldisc, fmt)
 	put("-tostop", TOSTOP, 0);
 	put("-flusho", FLUSHO, 0);
 	put("-pendin", PENDIN, 0);
+#ifndef __linux__
 	put("-nokerninfo", NOKERNINFO, 0);
+#endif
 	put("-extproc", EXTPROC, 0);
 
 	/* input flags */
@@ -139,7 +145,9 @@ print(tp, wp, ldisc, fmt)
 	binit("oflags");
 	put("-opost", OPOST, 1);
 	put("-onlcr", ONLCR, 1);
+#ifndef __linux__
 	put("-oxtabs", OXTABS, 1);
+#endif
 
 	/* control flags (hardware state) */
 	tmp = tp->c_cflag;
@@ -165,7 +173,9 @@ print(tp, wp, ldisc, fmt)
 	put("-clocal", CLOCAL, 0);
 	put("-cstopb", CSTOPB, 0);
 	put("-crtscts", CRTSCTS, 0);
+#ifndef __linux__
 	put("-mdmbuf", MDMBUF, 0);
+#endif
 
 	/* special control characters */
 	cc = tp->c_cc;

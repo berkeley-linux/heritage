@@ -1,5 +1,6 @@
 # $Id$
 
+TOPDIR = .
 include Config.mk
 
 .PHONY: all build-usr-bin build-usr-sbin build-bin clean makefiles distclean

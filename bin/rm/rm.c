@@ -55,6 +55,11 @@ static char sccsid[] = "@(#)rm.c	8.8 (Berkeley) 4/27/95";
 #include <pwd.h>
 #include <grp.h>
 
+#ifdef __linux__
+#define BSDCOMPAT_IMPLEMENTATION
+#include <bsdcompat.c>
+#endif
+
 int dflag, eval, fflag, iflag, Pflag, Wflag, stdin_ok;
 
 int	check __P((char *, char *, struct stat *));

@@ -40,6 +40,10 @@ static char sccsid[] = "@(#)modes.c	8.3 (Berkeley) 4/2/94";
 #include <string.h>
 #include "stty.h"
 
+#ifdef __linux__
+#include <bsdcompat.c>
+#endif
+
 struct modes {
 	char *name;
 	long set;
@@ -79,8 +83,10 @@ struct modes cmodes[] = {
 	{ "-clocal",	0, CLOCAL },
 	{ "crtscts",	CRTSCTS, 0 },
 	{ "-crtscts",	0, CRTSCTS },
+#ifndef __linux__
 	{ "mdmbuf",	MDMBUF, 0 },
 	{ "-mdmbuf",	0, MDMBUF },
+#endif
 	{ NULL },
 };
 
@@ -165,10 +171,12 @@ struct modes lmodes[] = {
 	{ "-crt",	ECHOK, ECHOE|ECHOKE|ECHOCTL },
 	{ "newcrt",	ECHOE|ECHOKE|ECHOCTL, ECHOK|ECHOPRT },
 	{ "-newcrt",	ECHOK, ECHOE|ECHOKE|ECHOCTL },
+#ifndef __linux__
 	{ "nokerninfo",	NOKERNINFO, 0 },
 	{ "-nokerninfo",0, NOKERNINFO },
 	{ "kerninfo",	0, NOKERNINFO },
 	{ "-kerninfo",	NOKERNINFO, 0 },
+#endif
 	{ NULL },
 };
 
@@ -179,10 +187,12 @@ struct modes omodes[] = {
 	{ "-litout",	OPOST, 0 },
 	{ "onlcr",	ONLCR, 0 },
 	{ "-onlcr",	0, ONLCR },
+#ifndef __linux__
 	{ "tabs",	0, OXTABS },		/* "preserve" tabs */
 	{ "-tabs",	OXTABS, 0 },
 	{ "oxtabs",	OXTABS, 0 },
 	{ "-oxtabs",	0, OXTABS },
+#endif
 	{ NULL },
 };
 

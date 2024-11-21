@@ -102,12 +102,12 @@ wr_start()
 	if (!wrblksz)  
 		wrblksz = frmt->bsz;
 	if (wrblksz > MAXBLK) {
-		warn(1, "Write block size of %d too large, maximium is: %d",
+		pax_warn(1, "Write block size of %d too large, maximium is: %d",
 			wrblksz, MAXBLK);
 		return(-1);
 	}
 	if (wrblksz % BLKMULT) {
-		warn(1, "Write block size of %d is not a %d byte multiple",
+		pax_warn(1, "Write block size of %d is not a %d byte multiple",
 		    wrblksz, BLKMULT);
 		return(-1);
 	}
@@ -147,12 +147,12 @@ rd_start()
 	buf = &(bufmem[BLKMULT]);
 	if ((act == APPND) && wrblksz) {
 		if (wrblksz > MAXBLK) {
-			warn(1,"Write block size %d too large, maximium is: %d",
+			pax_warn(1,"Write block size %d too large, maximium is: %d",
 				wrblksz, MAXBLK);
 			return(-1);
 		}
 		if (wrblksz % BLKMULT) {
-			warn(1, "Write block size %d is not a %d byte multiple",
+			pax_warn(1, "Write block size %d is not a %d byte multiple",
 		    	wrblksz, BLKMULT);
 			return(-1);
 		}
@@ -231,7 +231,7 @@ appnd_start(skcnt)
 	off_t cnt;
 
 	if (exit_val != 0) {
-		warn(0, "Cannot append to an archive that may have flaws.");
+		pax_warn(0, "Cannot append to an archive that may have flaws.");
 		return(-1);
 	}
 	/*
@@ -308,7 +308,7 @@ appnd_start(skcnt)
 	return(0);
 
     out:
-	warn(1, "Unable to rewrite archive trailer, cannot append.");
+	pax_warn(1, "Unable to rewrite archive trailer, cannot append.");
 	return(-1);
 }
 	
@@ -340,7 +340,7 @@ rd_sync()
 	if (maxflt == 0)
 		return(-1);
 	if (act == APPND) {
-		warn(1, "Unable to append when there are archive read errors.");
+		pax_warn(1, "Unable to append when there are archive read errors.");
 		return(-1);
 	}
 
@@ -374,7 +374,7 @@ rd_sync()
 		 * can extract out of the archive.
 		 */
 		if ((maxflt > 0) && (++errcnt > maxflt))
-			warn(0,"Archive read error limit (%d) reached",maxflt);
+			pax_warn(0,"Archive read error limit (%d) reached",maxflt);
 		else if (ar_rdsync() == 0)
 			continue;
 		if (ar_next() < 0)
@@ -701,11 +701,11 @@ wr_rdfile(arcn, ifd, left)
 	if (res < 0)
 		syswarn(1, errno, "Read fault on %s", arcn->org_name);
 	else if (size != 0L)
-		warn(1, "File changed size during read %s", arcn->org_name);
+		pax_warn(1, "File changed size during read %s", arcn->org_name);
 	else if (fstat(ifd, &sb) < 0)
 		syswarn(1, errno, "Failed stat on %s", arcn->org_name);
 	else if (arcn->sb.st_mtime != sb.st_mtime)
-		warn(1, "File %s was modified during copy to archive",
+		pax_warn(1, "File %s was modified during copy to archive",
 			arcn->org_name);
 	*left = size;
 	return(0);
@@ -816,7 +816,7 @@ rd_wrfile(arcn, ofd, left)
 	 * calculated crc to the crc stored in the archive
 	 */
 	if (docrc && (size == 0L) && (arcn->crc != crc))
-		warn(1,"Actual crc does not match expected crc %s",arcn->name);
+		pax_warn(1,"Actual crc does not match expected crc %s",arcn->name);
 	return(0);
 }
 
@@ -888,12 +888,12 @@ cp_file(arcn, fd1, fd2)
 		syswarn(1, errno, "Failed write during copy of %s to %s",
 			arcn->org_name, arcn->name);
 	else if (cpcnt != arcn->sb.st_size)
-		warn(1, "File %s changed size during copy to %s",
+		pax_warn(1, "File %s changed size during copy to %s",
 			arcn->org_name, arcn->name);
 	else if (fstat(fd1, &sb) < 0)
 		syswarn(1, errno, "Failed stat of %s", arcn->org_name);
 	else if (arcn->sb.st_mtime != sb.st_mtime)
-		warn(1, "File %s was modified during copy to %s",
+		pax_warn(1, "File %s was modified during copy to %s",
 			arcn->org_name, arcn->name);
 
 	/*
@@ -986,7 +986,7 @@ buf_flush(bufcnt)
 	 * at least one record. We always round limit UP to next blocksize.
 	 */
 	if ((wrlimit > 0) && (wrcnt > wrlimit)) {
-		warn(0, "User specified archive volume byte limit reached.");
+		pax_warn(0, "User specified archive volume byte limit reached.");
 		if (ar_next() < 0) {
 			wrcnt = 0;
 			exit_val = 1;

@@ -95,7 +95,7 @@ uidtb_start()
 		return(-1);
 	if ((uidtb = (UIDC **)calloc(UID_SZ, sizeof(UIDC *))) == NULL) {
 		++fail;
-		warn(1, "Unable to allocate memory for user id cache table");
+		pax_warn(1, "Unable to allocate memory for user id cache table");
 		return(-1);
 	}
 	return(0);
@@ -124,7 +124,7 @@ gidtb_start()
 		return(-1);
 	if ((gidtb = (GIDC **)calloc(GID_SZ, sizeof(GIDC *))) == NULL) {
 		++fail;
-		warn(1, "Unable to allocate memory for group id cache table");
+		pax_warn(1, "Unable to allocate memory for group id cache table");
 		return(-1);
 	}
 	return(0);
@@ -153,7 +153,7 @@ usrtb_start()
 		return(-1);
 	if ((usrtb = (UIDC **)calloc(UNM_SZ, sizeof(UIDC *))) == NULL) {
 		++fail;
-		warn(1, "Unable to allocate memory for user name cache table");
+		pax_warn(1, "Unable to allocate memory for user name cache table");
 		return(-1);
 	}
 	return(0);
@@ -182,7 +182,7 @@ grptb_start()
 		return(-1);
 	if ((grptb = (GIDC **)calloc(GNM_SZ, sizeof(GIDC *))) == NULL) {
 		++fail;
-		warn(1,"Unable to allocate memory for group name cache table");
+		pax_warn(1,"Unable to allocate memory for group name cache table");
 		return(-1);
 	}
 	return(0);

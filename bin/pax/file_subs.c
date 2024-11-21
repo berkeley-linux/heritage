@@ -205,7 +205,7 @@ lnk_creat(arcn)
 	}
 
 	if (S_ISDIR(sb.st_mode)) {
-		warn(1, "A hard link to the directory %s is not allowed",
+		pax_warn(1, "A hard link to the directory %s is not allowed",
 		    arcn->ln_name);
 		return(-1);
 	}
@@ -277,7 +277,7 @@ chk_same(arcn)
 	 * better make sure the user does not have src == dest by mistake
 	 */
 	if ((arcn->sb.st_dev == sb.st_dev) && (arcn->sb.st_ino == sb.st_ino)) {
-		warn(1, "Unable to copy %s, file would overwrite itself",
+		pax_warn(1, "Unable to copy %s, file would overwrite itself",
 		    arcn->name);
 		return(0);
 	}
@@ -324,7 +324,7 @@ mk_link(to, to_sb, from, ign)
 		 * make sure it is not the same file, protect the user
 		 */
 		if ((to_sb->st_dev==sb.st_dev)&&(to_sb->st_ino == sb.st_ino)) {
-			warn(1, "Unable to link file %s to itself", to);
+			pax_warn(1, "Unable to link file %s to itself", to);
 			return(-1);;
 		}
 
@@ -424,7 +424,7 @@ node_creat(arcn)
 			/*
 			 * Skip sockets, operation has no meaning under BSD
 			 */
-			warn(0,
+			pax_warn(0,
 			    "%s skipped. Sockets cannot be copied or extracted",
 			    arcn->name);
 			return(-1);
@@ -440,7 +440,7 @@ node_creat(arcn)
 			/*
 			 * we should never get here
 			 */
-			warn(0, "%s has an unknown file type, skipping",
+			pax_warn(0, "%s has an unknown file type, skipping",
 				arcn->name);
 			return(-1);
 		}
@@ -1040,11 +1040,11 @@ set_crc(arcn, fd)
 	 * they can create inconsistant archive copies.
 	 */
 	if (cpcnt != arcn->sb.st_size)
-		warn(1, "File changed size %s", arcn->org_name);
+		pax_warn(1, "File changed size %s", arcn->org_name);
 	else if (fstat(fd, &sb) < 0)
 		syswarn(1, errno, "Failed stat on %s", arcn->org_name);
 	else if (arcn->sb.st_mtime != sb.st_mtime)
-		warn(1, "File %s was modified during read", arcn->org_name);
+		pax_warn(1, "File %s was modified during read", arcn->org_name);
 	else if (lseek(fd, (off_t)0L, SEEK_SET) < 0)
 		syswarn(1, errno, "File rewind failed on: %s", arcn->org_name);
 	else {
