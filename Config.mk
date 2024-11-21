@@ -1,4 +1,4 @@
-# $ID$
+# $Id$
 
 CC = cc
 CFLAGS = -g -DEXTENDED -D_DEFAULT_SOURCE -DFILEC -DNLS -DSHORT_STRINGS -Dunix -fcommon -I. -Werror -D_KMEMUSER
