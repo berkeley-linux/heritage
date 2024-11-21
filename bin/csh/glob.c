@@ -50,6 +50,13 @@ static char sccsid[] = "@(#)glob.c	8.1 (Berkeley) 5/31/93";
 #include "csh.h"
 #include "extern.h"
 
+#ifndef GLOB_MAGCHAR
+#define GLOB_MAGCHAR 0
+#endif
+#ifndef GLOB_NOMAGIC
+#define GLOB_NOMAGIC 0
+#endif
+
 static int noglob;
 static int pargsiz, gargsiz;
 
@@ -419,6 +426,7 @@ libglob(vl)
 	default:
 	    break;
 	}
+#ifndef __musl__
 	if (globv.gl_flags & GLOB_MAGCHAR) {
 #ifdef __linux__
 	    match |= (globv.gl_pathc != 0);
@@ -427,6 +435,7 @@ libglob(vl)
 #endif
 	    magic = 1;
 	}
+#endif
 	gflgs |= GLOB_APPEND;
     }
     while (*++vl);

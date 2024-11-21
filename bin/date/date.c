@@ -205,6 +205,12 @@ setthetime(p)
 		badformat();
 
 	/* set the time */
+#ifdef __musl__
+	if(nflag){
+		fprintf(stderr, "date: not implemented\n");
+		exit(1);
+	}
+#else
 	if (nflag || netsettime(tval)) {
 #ifndef __FreeBSD__
 		logwtmp("|", "date", "");
@@ -219,6 +225,7 @@ setthetime(p)
 		logwtmp("{", "date", "");
 #endif
 	}
+#endif
 
 	if ((p = getlogin()) == NULL)
 		p = "???";

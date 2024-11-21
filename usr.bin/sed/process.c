@@ -57,6 +57,14 @@ static char sccsid[] = "@(#)process.c	8.6 (Berkeley) 4/20/94";
 #include "defs.h"
 #include "extern.h"
 
+#ifndef DEFFILEMODE
+#define DEFFILEMODE 0644
+#endif
+
+#ifndef REG_STARTEND
+#define REG_STARTEND 0
+#endif
+
 static SPACE HS, PS, SS;
 #define	pd		PS.deleted
 #define	ps		PS.space

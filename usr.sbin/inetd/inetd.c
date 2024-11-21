@@ -97,6 +97,7 @@ static char sccsid[] = "@(#)inetd.c	8.4 (Berkeley) 4/13/94";
 #include <sys/wait.h>
 #include <sys/time.h>
 #include <sys/resource.h>
+#include <sys/types.h>
 
 #include <netinet/in.h>
 #include <arpa/inet.h>

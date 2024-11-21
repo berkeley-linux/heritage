@@ -46,6 +46,7 @@ static char sccsid[] = "@(#)join.c	8.6 (Berkeley) 5/4/95";
 #endif /* not lint */
 
 #include <sys/param.h>
+#include <sys/types.h>
 
 #include <ctype.h>
 #include <err.h>

@@ -35,6 +35,7 @@
 static char sccsid[] = "@(#)netdate.c	8.2 (Berkeley) 4/28/95";
 #endif /* not lint */
 
+#ifndef __musl__
 #include <sys/param.h>
 #include <sys/time.h>
 #include <sys/socket.h>
@@ -181,3 +182,4 @@ bad:
 	(void)close(s);
 	return (retval = 2);
 }
+#endif
