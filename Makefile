@@ -32,7 +32,7 @@ build-usr-sbin: makefiles
 		$(MAKE) -C $$i TOPDIR="$$TOPDIR" || break ; \
 	done
 
-build-bin: makefiles bin/csh/csherr.h bin/csh/const.h bin/sh/nodes.c bin/sh/nodes.h bin/sh/syntax.c bin/sh/syntax.h bin/sh/builtins.c bin/sh/builtins.h
+build-bin: makefiles bin/csh/csherr.h bin/csh/const.h
 	TOPDIR="`pwd`" && cd bin && for i in *; do \
 		$(MAKE) -C $$i TOPDIR="$$TOPDIR" || break ; \
 	done
@@ -48,29 +48,9 @@ clean: makefiles
 		$(MAKE) -C $$i clean TOPDIR="$$TOPDIR" ; \
 	done
 	rm -f bin/csh/const.h bin/csh/csherr.h
-	rm -f bin/sh/nodes.c bin/sh/nodes.h bin/sh/mknodes
-	rm -f bin/sh/syntax.c bin/sh/syntax.h bin/sh/mksyntax
-	rm -f bin/sh/builtins.c bin/sh/builtins.h
 
 distclean: makefiles clean
 	rm -f */*/Makefile
-
-### sh ###
-
-bin/sh/nodes.c bin/sh/nodes.h: bin/sh/mknodes
-	cd bin/sh && ./mknodes nodetypes nodes.c.pat
-
-bin/sh/mknodes: bin/sh/mknodes.c
-	$(CC) $(CFLAGS) bin/sh/mknodes.c -o $@
-
-bin/sh/syntax.c bin/sh/syntax.h: bin/sh/mksyntax
-	cd bin/sh && ./mksyntax
-
-bin/sh/mksyntax: bin/sh/mksyntax.c bin/sh/parser.h
-	$(CC) $(CFLAGS) bin/sh/mksyntax.c -o $@
-
-bin/sh/builtins.c bin/sh/builtins.h: bin/sh/mkbuiltins bin/sh/builtins.def
-	cd bin/sh && sh mkbuiltins .
 
 ### csh ###
 
