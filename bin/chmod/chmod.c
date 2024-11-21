@@ -53,6 +53,11 @@ static char sccsid[] = "@(#)chmod.c	8.8 (Berkeley) 4/1/94";
 #include <unistd.h>
 #include <limits.h>
 
+#ifdef __linux__
+#define BSDCOMPAT_IMPLEMENTATION
+#include <bsdcompat.c>
+#endif
+
 void usage __P((void));
 
 int
