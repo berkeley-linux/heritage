@@ -122,6 +122,9 @@ static char sccsid[] = "@(#)inetd.c	8.4 (Berkeley) 4/13/94";
 
 #define	SIGBLOCK	(sigmask(SIGCHLD)|sigmask(SIGHUP)|sigmask(SIGALRM))
 
+#ifndef LINE_MAX
+#define LINE_MAX 2048
+#endif
 
 int	debug = 0;
 int	nsock, maxsock;

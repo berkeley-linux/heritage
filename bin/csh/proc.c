@@ -73,7 +73,7 @@ static struct	process
 		*pgetcurr __P((struct process *));
 static void	 okpcntl __P((void));
 
-#ifdef __linux
+#if defined(__linux__) || defined(__FreeBSD__)
 union wait {
 	int w_status;
 	int w_stopsig;
@@ -124,7 +124,7 @@ found:
     if (pid == atoi(short2str(value(STRchild))))
 	unsetv(STRchild);
     pp->p_flags &= ~(PRUNNING | PSTOPPED | PREPORTED);
-#ifdef __linux__
+#if
     if (WIFSTOPPED(w.w_status)) {
 #else
     if (WIFSTOPPED(w)) {
@@ -768,8 +768,8 @@ pprint(pp, flag)
                             && (reason != SIGPIPE
                                 || (pp->p_flags & PPOU) == 0))) {
 			(void) fprintf(cshout, format,
-				       strsignal((unsigned char)
-						   pp->p_reason));
+				       sys_signame[(unsigned char)
+						   pp->p_reason]);
 			hadnl = 0;
 		    }
 		    break;
@@ -996,7 +996,7 @@ dokill(v, t)
     if (v[0] && v[0][0] == '-') {
 	if (v[0][1] == 'l') {
 	    for (signum = 1; signum < NSIG; signum++) {
-		(void) fprintf(cshout, "%s ", strsignal(signum));
+		(void) fprintf(cshout, "%s ", sys_signame[signum]);
 		if (signum == NSIG / 2)
 		    (void) fputc('\n', cshout);
 	    }
@@ -1014,7 +1014,7 @@ dokill(v, t)
 		name += 3;
 
 	    for (signum = 1; signum < NSIG; signum++)
-		if (!strcasecmp(strsignal(signum), name))
+		if (!strcasecmp(sys_signame[signum], name))
 		    break;
 
 	    if (signum == NSIG) {
