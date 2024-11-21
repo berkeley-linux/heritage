@@ -39,6 +39,7 @@
 static char sccsid[] = "@(#)process.c	8.6 (Berkeley) 4/20/94";
 #endif /* not lint */
 
+#include <sys/cdefs.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/ioctl.h>

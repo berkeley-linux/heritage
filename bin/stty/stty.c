@@ -41,6 +41,7 @@ static char copyright[] =
 static char sccsid[] = "@(#)stty.c	8.3 (Berkeley) 4/2/94";
 #endif /* not lint */
 
+#include <sys/cdefs.h>
 #include <sys/types.h>
 
 #include <ctype.h>
@@ -51,6 +52,9 @@ static char sccsid[] = "@(#)stty.c	8.3 (Berkeley) 4/2/94";
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#ifdef __musl__
+#include <sys/ttydefaults.h>
+#endif
 
 #include "stty.h"
 #include "extern.h"

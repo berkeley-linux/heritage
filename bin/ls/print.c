@@ -38,6 +38,7 @@
 static char sccsid[] = "@(#)print.c	8.5 (Berkeley) 7/28/94";
 #endif /* not lint */
 
+#include <sys/cdefs.h>
 #include <sys/param.h>
 #include <sys/stat.h>
 

@@ -41,6 +41,7 @@ static char copyright[] =
 static char sccsid[] = "@(#)tee.c	8.1 (Berkeley) 6/6/93";
 #endif /* not lint */
 
+#include <sys/cdefs.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <signal.h>
@@ -50,6 +51,10 @@ static char sccsid[] = "@(#)tee.c	8.1 (Berkeley) 6/6/93";
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifndef DEFFILEMODE
+#define DEFFILEMODE 0644
+#endif
 
 typedef struct _list {
 	struct _list *next;

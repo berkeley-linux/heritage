@@ -35,6 +35,7 @@
 static char sccsid[] = "@(#)display.c	8.1 (Berkeley) 6/6/93";
 #endif /* not lint */
 
+#include <sys/cdefs.h>
 #include <sys/param.h>
 #include <sys/stat.h>
 #include <sys/types.h>

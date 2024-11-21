@@ -39,6 +39,8 @@
  *	BUFSIZ		The i/o buffering size; also limits word size
  *	MAILINTVL	How often to mailcheck; more often is more expensive
  */
+#include <sys/cdefs.h>
+
 #ifndef BUFSIZ
 #define	BUFSIZ	1024		/* default buffer size */
 #endif				/* BUFSIZ */

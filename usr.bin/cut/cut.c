@@ -44,6 +44,8 @@ static char copyright[] =
 static char sccsid[] = "@(#)cut.c	8.3 (Berkeley) 5/4/95";
 #endif /* not lint */
 
+#include <sys/cdefs.h>
+
 #include <ctype.h>
 #include <errno.h>
 #include <limits.h>

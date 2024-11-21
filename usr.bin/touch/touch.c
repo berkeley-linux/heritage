@@ -41,6 +41,7 @@ static char copyright[] =
 static char sccsid[] = "@(#)touch.c	8.2 (Berkeley) 4/28/95";
 #endif /* not lint */
 
+#include <sys/cdefs.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/time.h>
@@ -53,6 +54,10 @@ static char sccsid[] = "@(#)touch.c	8.2 (Berkeley) 4/28/95";
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
+
+#ifndef DEFFILEMODE
+#define DEFFILEMODE 0644
+#endif
 
 int	rw __P((char *, struct stat *, int));
 void	stime_arg1 __P((char *, struct timeval *));

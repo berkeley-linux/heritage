@@ -35,6 +35,7 @@
 static char sccsid[] = "@(#)odsyntax.c	8.2 (Berkeley) 5/4/95";
 #endif /* not lint */
 
+#include <sys/cdefs.h>
 #include <sys/types.h>
 
 #include <ctype.h>

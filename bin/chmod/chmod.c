@@ -41,6 +41,7 @@ static char copyright[] =
 static char sccsid[] = "@(#)chmod.c	8.8 (Berkeley) 4/1/94";
 #endif /* not lint */
 
+#include <sys/cdefs.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 

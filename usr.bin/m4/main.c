@@ -50,6 +50,7 @@ static char sccsid[] = "@(#)main.c	8.1 (Berkeley) 6/6/93";
  * by: oz
  */
 
+#include <sys/cdefs.h>
 #include <sys/types.h>
 #include <signal.h>
 #include <errno.h>

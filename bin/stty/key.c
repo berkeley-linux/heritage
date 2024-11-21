@@ -35,6 +35,7 @@
 static char sccsid[] = "@(#)key.c	8.4 (Berkeley) 2/20/95";
 #endif /* not lint */
 
+#include <sys/cdefs.h>
 #include <sys/types.h>
 
 #include <err.h>
@@ -46,6 +47,10 @@ static char sccsid[] = "@(#)key.c	8.4 (Berkeley) 2/20/95";
 
 #include "stty.h"
 #include "extern.h"
+
+#ifdef __musl__
+#include <sys/ttydefaults.h>
+#endif
 
 #ifdef __linux__
 #include <bsdcompat.c>

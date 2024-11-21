@@ -64,6 +64,10 @@ static char sccsid[] = "@(#)dd.c	8.5 (Berkeley) 4/2/94";
 #include "dd.h"
 #include "extern.h"
 
+#ifndef DEFFILEMODE
+#define DEFFILEMODE 0644
+#endif
+
 static void dd_close __P((void));
 static void dd_in __P((void));
 static void getfdtype __P((IO *));

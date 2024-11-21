@@ -41,12 +41,14 @@ static char copyright[] =
 static char sccsid[] = "@(#)uname.c	8.2 (Berkeley) 5/4/95";
 #endif /* not lint */
 
+#include <sys/cdefs.h>
 #include <sys/param.h>
 #ifdef __linux__
 #include <sys/utsname.h>
 #else
 #include <sys/sysctl.h>
 #endif
+#include <sys/types.h>
 
 #include <err.h>
 #include <stdio.h>

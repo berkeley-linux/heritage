@@ -6,3 +6,4 @@ Currently builds on:
  - FreeBSD/amd64 14.1
  - OpenBSD/amd64 7.6
  - Debian GNU/Linux 12
+ - Debian GNU/Linux 12 with musl-gcc

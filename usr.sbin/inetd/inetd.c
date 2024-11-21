@@ -90,6 +90,7 @@ static char sccsid[] = "@(#)inetd.c	8.4 (Berkeley) 4/13/94";
  *
  * Comment lines are indicated by a `#' in column 1.
  */
+#include <sys/cdefs.h>
 #include <sys/param.h>
 #include <sys/stat.h>
 #include <sys/ioctl.h>

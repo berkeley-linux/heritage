@@ -40,6 +40,7 @@ static char sccsid[] = "@(#)conv.c	8.3 (Berkeley) 4/2/94";
 #endif /* not lint */
 
 #include <sys/param.h>
+#include <sys/types.h>
 
 #include <err.h>
 #include <string.h>

@@ -37,6 +37,8 @@
 #define DIFF_EXIT	1
 #define ERR_EXIT	2	/* error exit code */
 
+#include <sys/cdefs.h>
+
 void	c_regular __P((int, char *, off_t, off_t, int, char *, off_t, off_t));
 void	c_special __P((int, char *, off_t, int, char *, off_t));
 void	diffmsg __P((char *, char *, off_t, off_t));

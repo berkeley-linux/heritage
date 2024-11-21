@@ -35,6 +35,7 @@
 static char sccsid[] = "@(#)gfmt.c	8.6 (Berkeley) 4/2/94";
 #endif /* not lint */
 
+#include <sys/cdefs.h>
 #include <sys/types.h>
 
 #include <err.h>
@@ -100,7 +101,11 @@ gread(tp, s)
 		}
 		if (CHK("ispeed")) {
 			(void)sscanf(ep, "%ld", &tmp);
+#ifdef __musl__
+			tp->__c_ispeed = tmp;
+#else
 			tp->c_ispeed = tmp;
+#endif
 			continue;
 		}
 		if (CHK("lflag")) {
@@ -113,7 +118,11 @@ gread(tp, s)
 		}
 		if (CHK("ospeed")) {
 			(void)sscanf(ep, "%ld", &tmp);
+#ifdef __musl__
+			tp->__c_ospeed = tmp;
+#else
 			tp->c_ospeed = tmp;
+#endif
 			continue;
 		}
 		for (cp = cchars1; cp->name != NULL; ++cp)

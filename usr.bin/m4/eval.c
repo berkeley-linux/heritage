@@ -44,6 +44,7 @@ static char sccsid[] = "@(#)eval.c	8.2 (Berkeley) 4/27/95";
  * by: oz
  */
 
+#include <sys/cdefs.h>
 #include <sys/types.h>
 #include <errno.h>
 #include <unistd.h>
