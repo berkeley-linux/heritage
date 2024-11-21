@@ -68,7 +68,11 @@ static char sccsid[] = "@(#)ls.c	8.7 (Berkeley) 8/5/94";
 #endif
 
 static void	 display __P((FTSENT *, FTSENT *));
+#ifdef __FreeBSD__
+static int	 mastercmp __P((const FTSENT * const *, const FTSENT * const *));
+#else
 static int	 mastercmp __P((const FTSENT **, const FTSENT **));
+#endif
 static void	 traverse __P((int, char **, int));
 
 static void (*printfcn) __P((DISPLAY *));
@@ -498,7 +502,12 @@ display(p, list)
  */
 static int
 mastercmp(a, b)
+#ifdef __FreeBSD__
+	const FTSENT * const * a;
+	const FTSENT * const * b;
+#else
 	const FTSENT **a, **b;
+#endif
 {
 	int a_info, b_info;
 

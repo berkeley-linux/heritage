@@ -1,0 +1,11 @@
+/* $Id$ */
+
+#define SECSPERMIN      60
+#define MINSPERHOUR     60
+#define HOURSPERDAY     24
+#define DAYSPERWEEK     7
+#define DAYSPERNYEAR    365
+#define DAYSPERLYEAR    366
+#define SECSPERHOUR     (SECSPERMIN * MINSPERHOUR)
+#define SECSPERDAY      ((int) SECSPERHOUR * HOURSPERDAY)
+#define MONSPERYEAR     12

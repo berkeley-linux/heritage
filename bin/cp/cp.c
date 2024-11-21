@@ -90,7 +90,11 @@ int myumask;
 enum op { FILE_TO_FILE, FILE_TO_DIR, DIR_TO_DNE };
 
 int copy __P((char *[], enum op, int));
+#ifdef __FreeBSD__
+int mastercmp __P((const FTSENT * const *, const FTSENT * const *));
+#else
 int mastercmp __P((const FTSENT **, const FTSENT **));
+#endif
 
 int
 main(argc, argv)
@@ -430,7 +434,12 @@ copy(argv, type, fts_options)
  */
 int
 mastercmp(a, b)
+#ifdef __FreeBSD__
+	const FTSENT * const * a;
+	const FTSENT * const * b;
+#else
 	const FTSENT **a, **b;
+#endif
 {
 	int a_info, b_info;
 

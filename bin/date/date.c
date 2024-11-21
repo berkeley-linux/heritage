@@ -206,14 +206,18 @@ setthetime(p)
 
 	/* set the time */
 	if (nflag || netsettime(tval)) {
+#ifndef __FreeBSD__
 		logwtmp("|", "date", "");
+#endif
 		tv.tv_sec = tval;
 		tv.tv_usec = 0;
 		if (settimeofday(&tv, NULL)) {
 			perror("date: settimeofday");
 			exit(1);
 		}
+#ifndef __FreeBSD__
 		logwtmp("{", "date", "");
+#endif
 	}
 
 	if ((p = getlogin()) == NULL)

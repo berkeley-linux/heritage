@@ -48,6 +48,10 @@ static char sccsid[] = "@(#)print.c	8.6 (Berkeley) 4/16/94";
 #include <bsdcompat.c>
 #endif
 
+#ifdef __FreeBSD__
+#define TABLDISC 1
+#endif
+
 static void  binit __P((char *));
 static void  bput __P((char *));
 static char *ccval __P((struct cchar *, int));
