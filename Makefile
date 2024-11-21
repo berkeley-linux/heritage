@@ -16,6 +16,8 @@ makefiles: Makefile.in
 	cd bin && for i in *; do \
 		if [ "$$i" = "date" ]; then \
 			IFREQ="-lutil" ; \
+		else \
+			IFREQ="" ; \
 		fi ; \
 		sed "s/@output@/$$i/g" ../Makefile.in | sed "s/@objects@/`cd $$i && ls -d *.c | tr '\n' ' ' | sed -E 's/\.c/.o/g'`/g" | sed "s/@ifreq@/$$IFREQ/g" > $$i/Makefile ; \
 	done
@@ -30,18 +32,7 @@ build-usr-sbin: makefiles
 		$(MAKE) -C $$i TOPDIR="$$TOPDIR" || break ; \
 	done
 
-bin/csh/const.h: bin/csh/const.c
-	rm -f $@
-	$(CC) -E $(CFLAGS) bin/csh/const.c | egrep 'Char STR' | sed -e 's/Char \([a-zA-Z0-9_]*\)\(.*\)/extern Char \1[];/' | sort >> $@
-
-bin/csh/csherr.h: bin/csh/err.c
-	rm -f $@
-	echo '#ifndef _h_sh_err' >> $@
-	echo '#define _h_sh_err' >> $@
-	egrep 'ERR_' bin/csh/err.c | egrep '^#define' >> $@
-	echo '#endif' >> $@
-
-build-bin: makefiles bin/csh/csherr.h bin/csh/const.h
+build-bin: makefiles bin/csh/csherr.h bin/csh/const.h bin/sh/nodes.c bin/sh/nodes.h bin/sh/syntax.c bin/sh/syntax.h bin/sh/builtins.c bin/sh/builtins.h
 	TOPDIR="`pwd`" && cd bin && for i in *; do \
 		$(MAKE) -C $$i TOPDIR="$$TOPDIR" || break ; \
 	done
@@ -57,6 +48,39 @@ clean: makefiles
 		$(MAKE) -C $$i clean TOPDIR="$$TOPDIR" ; \
 	done
 	rm -f bin/csh/const.h bin/csh/csherr.h
+	rm -f bin/sh/nodes.c bin/sh/nodes.h bin/sh/mknodes
+	rm -f bin/sh/syntax.c bin/sh/syntax.h bin/sh/mksyntax
+	rm -f bin/sh/builtins.c bin/sh/builtins.h
 
 distclean: makefiles clean
 	rm -f */*/Makefile
+
+### sh ###
+
+bin/sh/nodes.c bin/sh/nodes.h: bin/sh/mknodes
+	cd bin/sh && ./mknodes nodetypes nodes.c.pat
+
+bin/sh/mknodes: bin/sh/mknodes.c
+	$(CC) $(CFLAGS) bin/sh/mknodes.c -o $@
+
+bin/sh/syntax.c bin/sh/syntax.h: bin/sh/mksyntax
+	cd bin/sh && ./mksyntax
+
+bin/sh/mksyntax: bin/sh/mksyntax.c bin/sh/parser.h
+	$(CC) $(CFLAGS) bin/sh/mksyntax.c -o $@
+
+bin/sh/builtins.c bin/sh/builtins.h: bin/sh/mkbuiltins bin/sh/builtins.def
+	cd bin/sh && sh mkbuiltins .
+
+### csh ###
+
+bin/csh/const.h: bin/csh/const.c
+	rm -f $@
+	$(CC) -E $(CFLAGS) bin/csh/const.c | egrep 'Char STR' | sed -e 's/Char \([a-zA-Z0-9_]*\)\(.*\)/extern Char \1[];/' | sort >> $@
+
+bin/csh/csherr.h: bin/csh/err.c
+	rm -f $@
+	echo '#ifndef _h_sh_err' >> $@
+	echo '#define _h_sh_err' >> $@
+	egrep 'ERR_' bin/csh/err.c | egrep '^#define' >> $@
+	echo '#endif' >> $@

@@ -52,6 +52,8 @@ static char sccsid[] = "@(#)rm.c	8.8 (Berkeley) 4/27/95";
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <pwd.h>
+#include <grp.h>
 
 int dflag, eval, fflag, iflag, Pflag, Wflag, stdin_ok;
 
