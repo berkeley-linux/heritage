@@ -15,12 +15,12 @@ install: @output@
 	mkdir -p $(DESTDIR)$(PREFIX)/bin/
 	cp @output@ $(DESTDIR)$(PREFIX)/bin/
 	if [ -f "@output@.1" ]; then \
-		mkdir -p $(DESTDIR)$(PREFIX)/share/man/man1 ; \
-		cp @output@.1 $(DESTDIR)$(PREFIX)/share/man/man1/ ; \
+		mkdir -p $(DESTDIR)$(PREFIX)/man/man1 ; \
+		cp @output@.1 $(DESTDIR)$(PREFIX)/man/man1/ ; \
 	fi
 	if [ -f "@output@.8" ]; then \
-		mkdir -p $(DESTDIR)$(PREFIX)/share/man/man8 ; \
-		cp @output@.8 $(DESTDIR)$(PREFIX)/share/man/man8/ ; \
+		mkdir -p $(DESTDIR)$(PREFIX)/man/man8 ; \
+		cp @output@.8 $(DESTDIR)$(PREFIX)/man/man8/ ; \
 	fi
 
 clean:
