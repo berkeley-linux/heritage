@@ -93,6 +93,7 @@ static char sccsid[] = "@(#)egrep.c	8.1 (Berkeley) 6/6/93";
 #include <regex.h>		/* must be henry spencer's version */
 #include <stdio.h>
 #include <ctype.h>
+#include <errno.h>
 #include <fcntl.h>
 #include "pathnames.h"
 
@@ -374,7 +375,6 @@ void
 egsecute(file)
 	char *file;
 {
-	extern int errno;
 
 	if (file == NULL)
 		fd = 0;
