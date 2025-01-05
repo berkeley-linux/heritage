@@ -55,6 +55,7 @@ static char sccsid[] = "@(#)main.c	8.4 (Berkeley) 5/4/95";
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
+#include <fcntl.h>
 
 #include "find.h"
 
@@ -75,8 +76,10 @@ main(argc, argv)
 {
 	register char **p, **start;
 	int Hflag, Lflag, Pflag, ch;
-	FILE* oldstderr = stderr;
-	stderr = fopen("/dev/null", "r+");
+	int devnull = open("/dev/null", O_RDWR);
+	int devout = open("/dev/stdout", O_RDWR);
+
+	dup2(devnull, STDERR_FILENO);
 
 	(void)time(&now);	/* initialize the time-of-day */
 
@@ -116,7 +119,8 @@ main(argc, argv)
 			break;
 		}
 brk:
-	stderr = oldstderr;
+
+	dup2(devout, STDERR_FILENO);
 
 	argc -= optind;	
 	argv += optind;
