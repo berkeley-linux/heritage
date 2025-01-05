@@ -49,7 +49,7 @@ enum ntype {
 typedef struct _plandata {
 	struct _plandata *next;			/* next node */
 	int (*eval)				/* node evaluation function */
-	    __P((struct _plandata *, FTSENT *));
+	    (struct _plandata *, FTSENT *);
 #define	F_EQUAL		1			/* [acm]time inum links size */
 #define	F_LESSTHAN	2
 #define	F_GREATER	3
