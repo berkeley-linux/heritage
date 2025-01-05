@@ -75,7 +75,7 @@ static char sccsid[] = "@(#)function.c	8.10 (Berkeley) 5/4/95";
 	}								\
 }
 
-static PLAN *palloc __P((enum ntype, int (*) __P((PLAN *, FTSENT *))));
+static PLAN *palloc (enum ntype, int (*) __P((PLAN *, FTSENT *)));
 
 /*
  * find_parsenum --

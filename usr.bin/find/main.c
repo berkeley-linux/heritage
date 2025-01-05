@@ -66,7 +66,7 @@ int isdepth;			/* do directories on post-order visit */
 int isoutput;			/* user specified output operator */
 int isxargs;			/* don't permit xargs delimiting chars */
 
-static void usage __P((void));
+static void usage (void);
 
 int
 main(argc, argv)

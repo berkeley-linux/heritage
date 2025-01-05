@@ -53,8 +53,8 @@ static char sccsid[] = "@(#)ls.c	8.1 (Berkeley) 6/6/93";
 
 /* Derived from the print routines in the ls(1) source code. */
 
-static void printlink __P((char *));
-static void printtime __P((time_t));
+static void printlink (char *);
+static void printtime (time_t);
 
 void
 printlong(name, accpath, sb)
