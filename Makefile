@@ -52,13 +52,13 @@ clean: makefiles
 
 install: all
 	TOPDIR="`pwd`" && cd usr.bin && for i in *; do \
-		$(MAKE) -C $$i install TOPDIR="$$TOPDIR" ; \
+		$(MAKE) -C $$i install TOPDIR="$$TOPDIR" DESTDIR=$(DESTDIR) ; \
 	done
 	TOPDIR="`pwd`" && cd usr.sbin && for i in *; do \
-		$(MAKE) -C $$i install TOPDIR="$$TOPDIR" ; \
+		$(MAKE) -C $$i install TOPDIR="$$TOPDIR" DESTDIR=$(DESTDIR) ; \
 	done
 	TOPDIR="`pwd`" && cd bin && for i in *; do \
-		$(MAKE) -C $$i install TOPDIR="$$TOPDIR" ; \
+		$(MAKE) -C $$i install TOPDIR="$$TOPDIR" DESTDIR=$(DESTDIR) ; \
 	done
 
 distclean: makefiles clean
