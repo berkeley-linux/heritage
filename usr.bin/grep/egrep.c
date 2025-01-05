@@ -93,6 +93,7 @@ static char sccsid[] = "@(#)egrep.c	8.1 (Berkeley) 6/6/93";
 #include <regex.h>		/* must be henry spencer's version */
 #include <stdio.h>
 #include <ctype.h>
+#include <fcntl.h>
 #include "pathnames.h"
 
 #define	MIN(A, B)	((A) > (B) ? (B) : (A))
